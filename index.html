@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>IND-INTELLIGENCE | Industrial Knowledge Platform</title>
+<meta name="description" content="AI-powered Industrial Knowledge Intelligence Platform — Expert Copilot, Knowledge Graph, Compliance Shield, Maintenance RCA, Lessons Learned Engine for Indian Heavy Industry."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+/*──────────────────────────────── RESET & TOKENS */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg0:#03060f;--bg1:#080d1a;--bg2:#0d1525;--bg3:#111d30;--bg4:#162238;
+  --border:#1a2740;--border2:#213050;
+  --txt1:#e8edf5;--txt2:#8fa3be;--txt3:#3d5068;
+  --amber:#f59e0b;--amb2:#fbbf24;--amb3:#d97706;--ambg:rgba(245,158,11,.12);
+  --rose:#f43f5e;--emerald:#10b981;--sky:#38bdf8;--violet:#8b5cf6;--orange:#f97316;
+  --font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--txt1);font-family:var(--font);}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+
+/*──────────────────────────────── LAYOUT */
+.shell{display:flex;height:100vh;overflow:hidden}
+
+/*──────────────────────────────── SIDEBAR */
+.sidebar{
+  width:220px;min-width:220px;background:var(--bg1);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+  position:relative;z-index:10;
+}
+.sidebar::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:100%;
+  background:linear-gradient(180deg,rgba(245,158,11,.04) 0%,transparent 40%);
+  pointer-events:none;
+}
+.sb-logo{
+  display:flex;align-items:center;gap:10px;
+  padding:16px 14px 14px;border-bottom:1px solid var(--border);
+}
+.logo-gem{
+  width:32px;height:32px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--amber),var(--orange));
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:#000;font-weight:900;
+  box-shadow:0 0 24px rgba(245,158,11,.35);
+}
+.logo-name{font-size:12px;font-weight:900;letter-spacing:.07em;line-height:1.2}
+.logo-name span{background:linear-gradient(90deg,var(--amb2),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-sub{font-size:8.5px;color:var(--txt3);letter-spacing:.06em;margin-top:1px}
+
+.sb-nav{flex:1;overflow-y:auto;padding:12px 8px}
+.sb-section{font-size:8px;font-weight:800;letter-spacing:.12em;color:var(--txt3);
+  text-transform:uppercase;padding:0 8px;margin:10px 0 5px}
+.nb{
+  width:100%;display:flex;align-items:center;gap:9px;
+  padding:8px 10px;border-radius:8px;font-size:12px;font-weight:500;
+  color:var(--txt2);background:transparent;border:none;cursor:pointer;
+  transition:.2s;text-align:left;position:relative;
+}
+.nb:hover{background:var(--bg3);color:var(--txt1)}
+.nb.on{background:var(--ambg);color:var(--amb2);border:1px solid rgba(245,158,11,.18)}
+.nb.on .ni{color:var(--amber)}
+.ni{width:15px;text-align:center;font-size:12px;flex-shrink:0}
+.nbadge{
+  margin-left:auto;font-size:8px;font-weight:800;
+  padding:1px 5px;border-radius:99px;
+}
+.br{background:rgba(244,63,94,.14);color:var(--rose);border:1px solid rgba(244,63,94,.22)}
+.ba{background:rgba(245,158,11,.14);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
+.bg{background:rgba(16,185,129,.14);color:var(--emerald);border:1px solid rgba(16,185,129,.22)}
+
+.sb-foot{padding:10px 8px;border-top:1px solid var(--border)}
+.sfc{background:var(--bg0);border:1px solid var(--border);border-radius:9px;padding:10px 12px}
+.sfr{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.sfl{font-size:9.5px;color:var(--txt2)}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--emerald);animation:pdot 2s infinite}
+@keyframes pdot{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,.4)}50%{opacity:.5;box-shadow:0 0 0 5px transparent}}
+.sfstat{font-family:var(--mono);font-size:9px;color:var(--txt3);margin-top:1px}
+.sfstat b{color:var(--amber);font-weight:600}
+
+/*──────────────────────────────── MAIN */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+
+/*──────────────────────────────── TOPBAR */
+.topbar{
+  height:52px;min-height:52px;background:var(--bg1);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 22px;gap:14px;
+}
+.tb-l{display:flex;align-items:center;gap:10px}
+.tb-bc{font-size:12.5px;color:var(--txt2)}
+.tb-bc strong{color:var(--txt1);font-weight:700}
+.plant-tag{
+  display:flex;align-items:center;gap:5px;
+  background:var(--bg2);border:1px solid var(--border);
+  padding:4px 11px;border-radius:99px;font-size:10.5px;color:var(--txt2);
+}
+.plant-tag i{color:var(--amber);font-size:10px}
+.tb-r{display:flex;align-items:center;gap:8px}
+.tbtn{
+  background:var(--bg2);border:1px solid var(--border);
+  color:var(--txt2);padding:5px 13px;border-radius:7px;
+  font-size:11px;font-weight:500;cursor:pointer;transition:.2s;
+  display:flex;align-items:center;gap:5px;
+}
+.tbtn:hover{border-color:var(--amber);color:var(--amber)}
+.tbtn.pri{background:var(--amber);color:#000;border-color:var(--amber);font-weight:800}
+.tbtn.pri:hover{background:var(--amb2)}
+
+/*──────────────────────────────── VIEW SYSTEM */
+.vc{flex:1;overflow:hidden;position:relative}
+.view{position:absolute;inset:0;display:none;overflow:hidden}
+.view.on{display:flex;flex-direction:column}
+
+/*──────────────────────────────── SHARED COMPONENTS */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.sec-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px}
+.sec-title i{color:var(--amber)}
+.sec-act{font-size:11px;color:var(--amber);cursor:pointer;background:none;border:none;transition:opacity .2s}
+.sec-act:hover{opacity:.7}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.card-title{font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--txt2);display:flex;align-items:center;gap:6px;margin-bottom:12px}
+
+.tag{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:4px}
+.tcrit{background:rgba(244,63,94,.1);color:var(--rose);border:1px solid rgba(244,63,94,.2)}
+.twarn{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+.tok  {background:rgba(16,185,129,.1);color:var(--emerald);border:1px solid rgba(16,185,129,.2)}
+.tinfo{background:rgba(56,189,248,.1);color:var(--sky);border:1px solid rgba(56,189,248,.2)}
+.tviol{background:rgba(139,92,246,.1);color:var(--violet);border:1px solid rgba(139,92,246,.2)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fadeUp .3s ease forwards}
+
+/*══════════════════════════════════════════════════════════════
+  VIEW 1 — DASHBOARD / HOME
+══════════════════════════════════════════════════════════════*/
+.dash{overflow-y:auto;padding:22px}
+.hero-banner{
+  border-radius:16px;padding:28px 32px;margin-bottom:22px;
+  background:linear-gradient(135deg,var(--bg3) 0%,rgba(245,158,11,.07) 100%);
+  border:1px solid rgba(245,158,11,.2);
+  position:relative;overflow:hidden;
+}
+.hero-banner::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,158,11,.12),transparent 70%);
+}
+.hero-title{font-size:22px;font-weight:900;margin-bottom:6px;
+  background:linear-gradient(90deg,var(--amb2),var(--orange));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:12.5px;color:var(--txt2);max-width:600px;line-height:1.7}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.hero-pill{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);
+  border-radius:99px;padding:5px 12px;font-size:10.5px;color:var(--amb2);font-weight:600;
+}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:16px 18px;position:relative;overflow:hidden;cursor:pointer;transition:.25s;
+}
+.kpi:hover{transform:translateY(-3px);border-color:var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.a::after{background:linear-gradient(90deg,var(--amber),transparent)}
+.kpi.e::after{background:linear-gradient(90deg,var(--emerald),transparent)}
+.kpi.s::after{background:linear-gradient(90deg,var(--sky),transparent)}
+.kpi.r::after{background:linear-gradient(90deg,var(--rose),transparent)}
+.kpi.v::after{background:linear-gradient(90deg,var(--violet),transparent)}
+.kpi-val{font-size:30px;font-weight:900;font-family:var(--mono);margin-bottom:2px}
+.kpi-lbl{font-size:10.5px;color:var(--txt2)}
+.kpi-delta{font-size:9.5px;margin-top:5px;display:flex;align-items:center;gap:3px}
+.du{color:var(--emerald)}.dd{color:var(--rose)}
+.kpi-icon{position:absolute;bottom:10px;right:12px;font-size:28px;opacity:.07}
+
+.dash-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.dash-grid .full{grid-column:1/-1}
+.dash-grid .half{grid-column:span 2}
+
+.alert-strip{
+  background:linear-gradient(90deg,rgba(244,63,94,.08),rgba(244,63,94,.03));
+  border:1px solid rgba(244,63,94,.2);border-radius:10px;
+  padding:10px 14px;display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;
+  cursor:pointer;transition:.2s;
+}
+.alert-strip:hover{border-color:var(--rose)}
+.alert-strip.warn{background:linear-gradient(90deg,rgba(245,158,11,.08),rgba(245,158,11,.03));border-color:rgba(245,158,11,.2)}
+.alert-strip.warn:hover{border-color:var(--amber)}
+.as-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.as-title{font-size:11.5px;font-weight:700;color:var(--txt1);margin-bottom:2px}
+.as-desc{font-size:10px;color:var(--txt2);line-height:1.5}
+.as-time{font-size:9px;color:var(--txt3);margin-top:3px;font-family:var(--mono)}
+
+.mini-stat{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)}
+.mini-stat:last-child{border-bottom:none}
+.ms-label{font-size:11px;color:var(--txt2)}
+.ms-val{font-family:var(--mono);font-size:11.5px;font-weight:700}
+
+/*══════════════════════════════════════════════════════════════
+  VIEW 2 — EXPERT COPILOT
+══════════════════════════════════════════════════════════════*/
+.copilot-wrap{display:grid;grid-template-columns:1fr 290px;height:100%;overflow:hidden}
+.chat-pane{display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border)}
+.cp-hdr{
+  padding:12px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg1);flex-shrink:0;
+}
+.cp-hdr-t{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--txt2)}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:9.5px;color:var(--amber);font-family:var(--mono)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--emerald);animation:pdot 2s infinite}
+.msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:14px}
+.msg{display:flex;flex-direction:column;max-width:84%}
+.msg.u{align-self:flex-end}
+.msg.a{align-self:flex-start}
+.mbubble{padding:11px 15px;border-radius:13px;font-size:12.5px;line-height:1.7}
+.msg.u .mbubble{background:linear-gradient(135deg,var(--amb3),var(--orange));color:#fff;border-radius:13px 13px 3px 13px}
+.msg.a .mbubble{background:var(--bg3);color:var(--txt1);border:1px solid var(--border);border-radius:13px 13px 13px 3px}
+.mmeta{font-size:9.5px;color:var(--txt3);margin-top:4px;padding:0 2px}
+.msg.u .mmeta{text-align:right}
+.cit{margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.cit-lbl{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:5px}
+.cit-item{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg4);border:1px solid var(--border);
+  border-radius:5px;padding:4px 8px;margin-bottom:3px;
+  font-family:var(--mono);font-size:9.5px;color:var(--amber);
+  cursor:pointer;transition:.2s;
+}
+.cit-item:hover{border-color:var(--amber);background:var(--ambg)}
+.cit-ref{margin-left:auto;font-size:8.5px;color:var(--txt3)}
+.conf-row{display:flex;align-items:center;gap:7px;margin-top:7px}
+.conf-lbl{font-size:9px;color:var(--txt3)}
+.conf-track{flex:1;height:3px;background:var(--border);border-radius:99px;overflow:hidden}
+.conf-fill{height:100%;border-radius:99px;transition:width .8s ease}
+.conf-val{font-size:9px;font-weight:800;font-family:var(--mono)}
+.typing{display:flex;align-items:center;gap:4px;padding:12px 15px}
+.td{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:blink 1.4s infinite both}
+.td:nth-child(2){animation-delay:.22s}.td:nth-child(3){animation-delay:.44s}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+.suggest-bar{
+  padding:8px 14px;border-top:1px solid var(--border);
+  background:rgba(3,6,15,.7);
+  display:flex;flex-wrap:wrap;gap:5px;align-items:center;flex-shrink:0;
+}
+.slbl{font-size:9.5px;color:var(--txt3);font-weight:700}
+.schip{
+  font-size:9.5px;background:var(--bg3);border:1px solid var(--border);
+  color:var(--txt2);padding:3.5px 9px;border-radius:99px;
+  cursor:pointer;transition:.2s;white-space:nowrap;
+}
+.schip:hover{border-color:var(--amber);color:var(--amber);background:var(--ambg)}
+.cinput-wrap{padding:12px 14px;border-top:1px solid var(--border);background:var(--bg1);flex-shrink:0}
+.cinput-row{display:flex;gap:7px}
+.cinput{
+  flex:1;background:var(--bg0);border:1px solid var(--border);
+  border-radius:9px;padding:10px 14px;font-size:12.5px;
+  color:var(--txt1);font-family:var(--font);outline:none;transition:.2s;
+}
+.cinput::placeholder{color:var(--txt3)}
+.cinput:focus{border-color:var(--amber);box-shadow:0 0 0 3px var(--ambg)}
+.csend{
+  background:var(--amber);color:#000;border:none;
+  padding:10px 16px;border-radius:9px;cursor:pointer;
+  font-size:12px;font-weight:800;transition:.2s;
+}
+.csend:hover{background:var(--amb2);transform:scale(1.04)}
+.copilot-side{display:flex;flex-direction:column;overflow-y:auto;padding:14px;gap:12px;background:var(--bg0)}
+.asset-it{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;padding:9px 11px;margin-bottom:7px;
+}
+.asset-it:last-child{margin-bottom:0}
+.ai-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.ai-id{font-family:var(--mono);font-size:11.5px;font-weight:700}
+.ai-desc{font-size:10px;color:var(--txt2)}
+.ai-bar{height:3px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:5px}
+.ai-fill{height:100%;border-radius:99px}
+.doc-it{
+  display:flex;align-items:center;gap:8px;padding:7px 9px;
+  border-radius:6px;background:var(--bg3);border:1px solid var(--border);
+  margin-bottom:5px;cursor:pointer;transition:.2s;
+}
+.doc-it:hover{border-color:var(--amber)}
+.doc-it:last-child{margin-bottom:0}
+
+/*══════════════════════════════════════════════════════════════
+  VIEW 3 — KNOWLEDGE GRAPH
+══════════════════════════════════════════════════════════════*/
+.gview{overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:18px}
+.g-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.gstat{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;position:relative;overflow:hidden;
+}
+.gstat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.gstat.a::after{background:linear-gradient(90deg,var(--amber),transparent)}
+.gstat.e::after{background:linear-gradient(90deg,var(--emerald),transparent)}
+.gstat.s::after{background:linear-gradient(90deg,var(--sky),transparent)}
+.gstat.v::after{background:linear-gradient(90deg,var(--violet),transparent)}
+.gstat-val{font-size:26px;font-weight:900;font-family:var(--mono)}
+.gstat-lbl{font-size:10px;color:var(--txt2)}
+.gstat-delta{font-size:9px;margin-top:4px;display:flex;align-items:center;gap:3px}
+.g-canvas-wrap{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;height:380px;position:relative;
+}
+#gcanvas{width:100%;height:100%}
+.g-legend{
+  position:absolute;top:14px;right:14px;
+  background:rgba(8,13,26,.92);border:1px solid var(--border);
+  border-radius:9px;padding:10px 13px;
+  display:flex;flex-direction:column;gap:5px;
+}
+.gl-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--txt2)}
+.gl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.g-bottom{display:grid;grid-template-columns:3fr 2fr;gap:14px}
+.etable{width:100%;border-collapse:collapse;font-size:11.5px}
+.etable th{text-align:left;padding:7px 10px;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--txt3);border-bottom:1px solid var(--border)}
+.etable td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--txt1)}
+.etable tr:last-child td{border-bottom:none}
+.etable td:first-child{font-family:var(--mono);color:var(--amber)}
+.etable tr:hover td{background:var(--bg3)}
+
+/*══════════════════════════════════════════════════════════════
+  VIEW 4 — COMPLIANCE SHIELD
+══════════════════════════════════════════════════════════════*/
+.compv{overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:18px}
+.comp-scores{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.cscore-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:16px;text-align:center;transition:.2s;cursor:pointer;
+}
+.cscore-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.3)}
+.ring-wrap{width:64px;height:64px;margin:0 auto 10px;position:relative}
+.ring-svg{transform:rotate(-90deg)}
+.rtrack{fill:none;stroke:var(--border);stroke-width:5}
+.rfill{fill:none;stroke-width:5;stroke-linecap:round}
+.ring-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;font-family:var(--mono)}
+.ct{font-size:11px;font-weight:800;margin-bottom:2px}
+.cs{font-size:9px;color:var(--txt3)}
+.comp-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gap-it{
+  display:flex;align-items:flex-start;gap:10px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:9px;padding:11px 13px;margin-bottom:8px;
+  transition:.2s;cursor:pointer;
+}
+.gap-it:hover{border-color:var(--amber)}
+.gap-it:last-child{margin-bottom:0}
+.gap-it.crit{border-left:3px solid var(--rose)}
+.gap-it.warn{border-left:3px solid var(--amber)}
+.gap-it.ok  {border-left:3px solid var(--emerald)}
+.gi-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+.git{font-size:11.5px;font-weight:700;margin-bottom:3px}
+.gid{font-size:10px;color:var(--txt2);line-height:1.55}
+.auto-pack{
+  background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(249,115,22,.04));
+  border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:18px;
+  display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;
+}
+.ap-title{font-size:14px;font-weight:800;margin-bottom:4px}
+.ap-desc{font-size:11px;color:var(--txt2);line-height:1.6}
+.ap-btn{
+  background:var(--amber);color:#000;border:none;
+  padding:10px 20px;border-radius:9px;cursor:pointer;
+  font-size:12px;font-weight:800;transition:.2s;white-space:nowrap;
+}
+.ap-btn:hover{background:var(--amb2)}
+
+/*══════════════════════════════════════════════════════════════
+  VIEW 5 — MAINTENANCE & RCA
+══════════════════════════════════════════════════════════════*/
+.rcav{overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:18px}
+.rca-top{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.rca-alert{
+  background:linear-gradient(90deg,rgba(244,63,94,.07),rgba(244,63,94,.02));
+  border:1px solid rgba(244,63,94,.25);border-radius:12px;
+  padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.ra-left{display:flex;align-items:center;gap:12px}
+.ra-icon{font-size:28px;color:var(--rose)}
+.ra-eq{font-family:var(--mono);font-size:20px;font-weight:900;color:var(--rose)}
+.ra-status{font-size:11px;color:var(--txt2);margin-top:2px}
+.health-ring{width:70px;height:70px;position:relative;flex-shrink:0}
+.health-lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.health-val{font-size:14px;font-weight:900;font-family:var(--mono);color:var(--rose)}
+.health-txt{font-size:7.5px;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em}
+.pred-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px}
+.pred-title{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--txt2);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.pred-meter{margin-bottom:10px}
+.pm-lbl{font-size:9.5px;color:var(--txt2);display:flex;justify-content:space-between;margin-bottom:4px}
+.pm-track{height:7px;background:var(--border);border-radius:99px;overflow:hidden}
+.pm-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--emerald),var(--amber),var(--rose))}
+.action-list{display:flex;flex-direction:column;gap:6px}
+.action-item{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:7px;padding:8px 11px;font-size:11px;
+  color:var(--txt1);cursor:pointer;transition:.2s;
+}
+.action-item:hover{border-color:var(--amber);background:var(--ambg)}
+.action-item i{color:var(--amber);width:13px}
+.timeline{display:flex;flex-direction:column}
+.tl-item{display:flex;gap:12px;position:relative}
+.tl-item::before{content:'';position:absolute;left:13px;top:30px;width:1px;height:calc(100% - 30px);background:var(--border)}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px;border:2px solid}
+.tl-dot.crit{background:rgba(244,63,94,.12);border-color:var(--rose);color:var(--rose)}
+.tl-dot.warn{background:rgba(245,158,11,.12);border-color:var(--amber);color:var(--amber)}
+.tl-dot.info{background:rgba(56,189,248,.12);border-color:var(--sky);color:var(--sky)}
+.tl-dot.ok  {background:rgba(16,185,129,.12);border-color:var(--emerald);color:var(--emerald)}
+.tl-body{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:11px 13px;flex:1;margin-bottom:9px}
+.tl-date{font-size:9.5px;color:var(--txt3);font-family:var(--mono)}
+.tl-title{font-size:12.5px;font-weight:700;margin:2px 0}
+.tl-desc{font-size:10.5px;color:var(--txt2);line-height:1.55}
+.mtabs{display:flex;gap:8px;margin-bottom:14px}
+.mtab{
+  font-size:11px;font-weight:600;padding:6px 14px;border-radius:7px;
+  background:var(--bg2);border:1px solid var(--border);
+  color:var(--txt2);cursor:pointer;transition:.2s;
+}
+.mtab.on{background:var(--ambg);border-color:rgba(245,158,11,.25);color:var(--amb2)}
+.asset-table-wrap{overflow-x:auto}
+.at{width:100%;border-collapse:collapse;font-size:11.5px}
+.at th{text-align:left;padding:8px 10px;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--txt3);border-bottom:1px solid var(--border);white-space:nowrap}
+.at td{padding:9px 10px;border-bottom:1px solid var(--border)}
+.at tr:last-child td{border-bottom:none}
+.at tr:hover td{background:var(--bg3)}
+.at td:first-child{font-family:var(--mono);color:var(--amber)}
+.hbar{height:4px;background:var(--border);border-radius:99px;overflow:hidden;width:60px}
+.hbar-fill{height:100%;border-radius:99px}
+
+/*══════════════════════════════════════════════════════════════
+  VIEW 6 — LESSONS LEARNED
+══════════════════════════════════════════════════════════════*/
+.lview{overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:18px}
+.ai-scan-bar{
+  background:linear-gradient(90deg,rgba(245,158,11,.06),rgba(245,158,11,.02));
+  border:1px solid rgba(245,158,11,.2);border-radius:11px;
+  padding:12px 16px;display:flex;align-items:center;gap:12px;
+}
+.asb-icon{font-size:22px;color:var(--amber)}
+.asb-title{font-size:12px;font-weight:800}
+.asb-desc{font-size:10.5px;color:var(--txt2);margin-top:1px}
+.lessons-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lesson{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:16px;
+  transition:.25s;cursor:pointer;
+}
+.lesson:hover{border-color:var(--amber);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.3)}
+.ltag{display:inline-block;font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:99px;margin-bottom:8px}
+.lt-inc{background:rgba(244,63,94,.12);color:var(--rose);border:1px solid rgba(244,63,94,.22)}
+.lt-nm {background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
+.lt-aud{background:rgba(56,189,248,.12);color:var(--sky);border:1px solid rgba(56,189,248,.22)}
+.lt-qnc{background:rgba(139,92,246,.12);color:var(--violet);border:1px solid rgba(139,92,246,.22)}
+.lt-pat{background:rgba(16,185,129,.12);color:var(--emerald);border:1px solid rgba(16,185,129,.22)}
+.ltitle{font-size:13px;font-weight:800;margin-bottom:5px}
+.ldesc{font-size:10.5px;color:var(--txt2);line-height:1.65;margin-bottom:10px}
+.lmeta{display:flex;align-items:center;justify-content:space-between}
+.lsite{font-size:9.5px;color:var(--txt3);font-family:var(--mono)}
+.lsev{font-size:9.5px;font-weight:800;display:flex;align-items:center;gap:4px}
+.impact-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.impact-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:14px;text-align:center;
+}
+.ic-val{font-size:22px;font-weight:900;font-family:var(--mono);margin-bottom:3px}
+.ic-lbl{font-size:10px;color:var(--txt2)}
+
+/*══════════════════════════════════════════════════════════════
+  VIEW 7 — DOCUMENT INGESTION
+══════════════════════════════════════════════════════════════*/
+.ingv{overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:18px}
+.drop-zone{
+  border:2px dashed var(--border2);border-radius:14px;
+  padding:44px;text-align:center;
+  transition:.3s;cursor:pointer;background:var(--bg2);
+}
+.drop-zone:hover{border-color:var(--amber);background:var(--ambg)}
+.dz-icon{font-size:38px;color:var(--amber);margin-bottom:10px;opacity:.85}
+.dz-title{font-size:15px;font-weight:800;margin-bottom:5px}
+.dz-sub{font-size:11.5px;color:var(--txt2)}
+.ftypes{display:flex;gap:7px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.ftype{font-size:9.5px;font-weight:700;padding:3.5px 9px;border-radius:99px;background:var(--bg3);border:1px solid var(--border);color:var(--txt2)}
+.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:0}
+.pstage{
+  background:var(--bg2);border:1px solid var(--border);
+  padding:14px;text-align:center;
+  border-left:none;
+}
+.pstage:first-child{border-left:1px solid var(--border);border-radius:10px 0 0 10px}
+.pstage:last-child{border-radius:0 10px 10px 0}
+.ps-icon{font-size:20px;margin-bottom:6px}
+.ps-title{font-size:11px;font-weight:800;margin-bottom:2px}
+.ps-desc{font-size:9px;color:var(--txt2)}
+.pstage.act .ps-title,.pstage.act .ps-icon{color:var(--amber)}
+.queue-list{display:flex;flex-direction:column;gap:7px}
+.q-item{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:9px;padding:10px 14px;
+}
+.qi-icon{font-size:17px;width:20px;text-align:center}
+.qi-name{font-size:11.5px;font-family:var(--mono);flex:1}
+.qi-prog{width:110px}
+.qi-bar{height:4px;background:var(--border);border-radius:99px;overflow:hidden}
+.qi-fill{height:100%;border-radius:99px;transition:width 1.5s ease}
+.qi-status{font-size:9.5px;font-weight:800;min-width:58px;text-align:right}
+.ingest-two{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+
+/*══════════════════════════════════════════════════════════════
+  VIEW 8 — ARCHITECTURE
+══════════════════════════════════════════════════════════════*/
+.archv{overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:18px}
+.arch-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px;padding:24px;
+}
+.arch-layer{margin-bottom:18px}
+.arch-layer-lbl{
+  font-size:8.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--txt3);border-left:3px solid var(--amber);
+  padding-left:9px;margin-bottom:10px;
+}
+.arch-row{display:flex;gap:9px;flex-wrap:wrap}
+.arch-node{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:9px;padding:11px 14px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  min-width:110px;text-align:center;transition:.2s;cursor:pointer;
+}
+.arch-node:hover{border-color:var(--amber);transform:translateY(-2px)}
+.arch-node i{font-size:17px}
+.arch-nn{font-size:10.5px;font-weight:700}
+.arch-ns{font-size:9px;color:var(--txt3)}
+.arch-arrow{display:flex;justify-content:flex-start;padding:2px 14px;color:var(--border2);font-size:18px}
+.judge-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.judge-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:14px;text-align:center;
+}
+.jc-icon{font-size:20px;margin-bottom:6px}
+.jc-val{font-size:22px;font-weight:900;font-family:var(--mono);margin-bottom:2px}
+.jc-lbl{font-size:10px;color:var(--txt2)}
+
+/*──────────────────────────────── COUNTER ANIMATION */
+.cnum{display:inline-block}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!--═══════════════════════════════════ SIDEBAR ═══-->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="logo-gem">⚙</div>
+    <div>
+      <div class="logo-name"><span>IND-INTELLIGENCE</span></div>
+      <div class="logo-sub">INDUSTRIAL AI PLATFORM</div>
+    </div>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="sb-section">Overview</div>
+    <button class="nb on" id="tab-dash" onclick="sw('dash')">
+      <i class="fa-solid fa-gauge-high ni"></i>Command Dashboard
+    </button>
+
+    <div class="sb-section" style="margin-top:12px">AI Modules</div>
+    <button class="nb" id="tab-copilot" onclick="sw('copilot')">
+      <i class="fa-solid fa-message ni"></i>Expert Copilot
+      <span class="nbadge bg">Live</span>
+    </button>
+    <button class="nb" id="tab-graph" onclick="sw('graph')">
+      <i class="fa-solid fa-circle-nodes ni"></i>Knowledge Graph
+    </button>
+    <button class="nb" id="tab-compliance" onclick="sw('compliance')">
+      <i class="fa-solid fa-shield-halved ni"></i>Compliance Shield
+      <span class="nbadge br">3</span>
+    </button>
+    <button class="nb" id="tab-rca" onclick="sw('rca')">
+      <i class="fa-solid fa-wrench ni"></i>Maintenance & RCA
+      <span class="nbadge ba">Alert</span>
+    </button>
+    <button class="nb" id="tab-lessons" onclick="sw('lessons')">
+      <i class="fa-solid fa-lightbulb ni"></i>Lessons Learned
+    </button>
+    <button class="nb" id="tab-pid" onclick="sw('pid')">
+      <i class="fa-solid fa-eye ni"></i>P&ID Vision
+      <span class="nbadge" style="background:rgba(56,189,248,.14);color:var(--sky);border:1px solid rgba(56,189,248,.22)">Beta</span>
+    </button>
+
+    <div class="sb-section" style="margin-top:12px">Platform</div>
+    <button class="nb" id="tab-ingestion" onclick="sw('ingestion')">
+      <i class="fa-solid fa-cloud-arrow-up ni"></i>Doc Ingestion
+    </button>
+    <button class="nb" id="tab-arch" onclick="sw('arch')">
+      <i class="fa-solid fa-sitemap ni"></i>Architecture
+    </button>
+  </nav>
+
+  <div class="sb-foot">
+    <div class="sfc">
+      <div class="sfr"><span class="sfl">RAG Engine Status</span><span class="pdot"></span></div>
+      <div class="sfstat">Indexed: <b>1,420</b> docs</div>
+      <div class="sfstat">Nodes: <b>8,341</b> · Edges: <b>24,892</b></div>
+      <div class="sfstat" style="color:var(--emerald);margin-top:3px">● All systems nominal</div>
+    </div>
+  </div>
+</aside>
+
+<!--═══════════════════════════════════ MAIN ═══-->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-bc" id="breadcrumb"><strong>Command Dashboard</strong></div>
+    </div>
+    <div class="tb-c" style="flex:1; max-width:400px; margin:0 20px;">
+      <div style="position:relative;display:flex;align-items:center;">
+        <i class="fa-solid fa-magnifying-glass" style="position:absolute;left:10px;color:var(--txt3);font-size:12px;"></i>
+        <input type="text" placeholder="Semantic search documents, assets, failures..." style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:6px 30px 6px 30px;color:var(--txt1);font-size:11.5px;outline:none;transition:0.2s;" onfocus="this.style.borderColor='var(--amber)'" onblur="this.style.borderColor='var(--border)'">
+        <i class="fa-solid fa-microphone" style="position:absolute;right:10px;color:var(--amber);font-size:12px;cursor:pointer;" title="Voice-enabled query"></i>
+      </div>
+    </div>
+    <div class="tb-r">
+      <div class="plant-tag" title="Enterprise Integrations: SAP, IBM Maximo, Oracle EAM, SCADA Active"><i class="fa-solid fa-plug-circle-check" style="color:var(--emerald)"></i> Integrations Live</div>
+      <button class="tbtn" title="QR-code equipment lookup"><i class="fa-solid fa-qrcode"></i> Scan Asset</button>
+      <button class="tbtn pri" onclick="sw('copilot')"><i class="fa-solid fa-bolt"></i> Copilot</button>
+      <div class="user-profile" style="display:flex;align-items:center;gap:8px;margin-left:8px;padding-left:12px;border-left:1px solid var(--border);cursor:pointer;">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;color:var(--txt1);">JD</div>
+        <div style="display:flex;flex-direction:column;">
+          <span style="font-size:10px;font-weight:700;">John Doe</span>
+          <span style="font-size:8px;color:var(--txt3);">Maint. Manager (RBAC)</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="vc">
+
+  <!--══════════════ DASHBOARD ══════════════-->
+  <div class="view on" id="view-dash">
+    <div class="dash">
+
+      <div class="hero-banner">
+        <div class="hero-title">IND-INTELLIGENCE — Industrial Knowledge Platform</div>
+        <div class="hero-sub">AI-powered platform that ingests heterogeneous industrial documents — P&IDs, maintenance records, safety procedures, inspection reports — and makes their collective intelligence queryable, actionable, and continuously updated at the point of need, across any device or function.</div>
+        <div class="hero-pills">
+          <span class="hero-pill"><i class="fa-solid fa-message"></i> RAG Copilot</span>
+          <span class="hero-pill"><i class="fa-solid fa-circle-nodes"></i> Knowledge Graph</span>
+          <span class="hero-pill"><i class="fa-solid fa-shield-halved"></i> Compliance AI</span>
+          <span class="hero-pill"><i class="fa-solid fa-wrench"></i> Predictive RCA</span>
+          <span class="hero-pill"><i class="fa-solid fa-lightbulb"></i> Lessons Engine</span>
+          <span class="hero-pill"><i class="fa-solid fa-eye"></i> P&ID Vision</span>
+        </div>
+      </div>
+
+      <div class="kpi-row">
+        <div class="kpi a" onclick="sw('graph')" title="Click to explore">
+          <div class="kpi-val" style="color:var(--amber)"><span class="cnum" data-target="1420">0</span></div>
+          <div class="kpi-lbl">Documents Indexed</div>
+          <div class="kpi-delta du"><i class="fa-solid fa-arrow-up"></i> +12 today</div>
+          <i class="fa-solid fa-file-lines kpi-icon"></i>
+        </div>
+        <div class="kpi e" onclick="sw('graph')">
+          <div class="kpi-val" style="color:var(--emerald)"><span class="cnum" data-target="8341">0</span></div>
+          <div class="kpi-lbl">Knowledge Graph Nodes</div>
+          <div class="kpi-delta du"><i class="fa-solid fa-arrow-up"></i> +234 this week</div>
+          <i class="fa-solid fa-circle-nodes kpi-icon"></i>
+        </div>
+        <div class="kpi s" onclick="sw('compliance')">
+          <div class="kpi-val" style="color:var(--sky)">83<span style="font-size:16px">%</span></div>
+          <div class="kpi-lbl">Overall Compliance Score</div>
+          <div class="kpi-delta dd"><i class="fa-solid fa-triangle-exclamation"></i> 3 critical gaps</div>
+          <i class="fa-solid fa-shield-halved kpi-icon"></i>
+        </div>
+        <div class="kpi r" onclick="sw('rca')">
+          <div class="kpi-val" style="color:var(--rose)"><span class="cnum" data-target="2">0</span></div>
+          <div class="kpi-lbl">Active Asset Alerts</div>
+          <div class="kpi-delta dd"><i class="fa-solid fa-arrow-up"></i> PUMP-102A critical</div>
+          <i class="fa-solid fa-triangle-exclamation kpi-icon"></i>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+
+        <!-- Active Alerts -->
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-bell" style="color:var(--rose)"></i> Active Priority Alerts</div>
+          <div class="alert-strip" onclick="sw('rca')">
+            <i class="fa-solid fa-circle-xmark as-icon" style="color:var(--rose)"></i>
+            <div>
+              <div class="as-title">PUMP-102A — Critical Bearing Failure Imminent</div>
+              <div class="as-desc">Vibration at 14.2 mm/s RMS (2.8× baseline). AI model predicts failure in 72–96 hours. Immediate bearing inspection required.</div>
+              <div class="as-time">Jun 22, 2024 · 14:30 IST · Predictive Engine</div>
+            </div>
+            <span class="tag tcrit" style="flex-shrink:0">CRITICAL</span>
+          </div>
+          <div class="alert-strip" onclick="sw('compliance')">
+            <i class="fa-solid fa-circle-xmark as-icon" style="color:var(--rose)"></i>
+            <div>
+              <div class="as-title">PESO Clause 12.4 — Hot Work Permit Expired</div>
+              <div class="as-desc">CDU-Unit-1 flange replacement permit expired 3 days ago. Work continuing without valid authorisation.</div>
+              <div class="as-time">Jun 19, 2024 · 08:00 IST · Compliance Shield</div>
+            </div>
+            <span class="tag tcrit" style="flex-shrink:0">CRITICAL</span>
+          </div>
+          <div class="alert-strip warn" onclick="sw('compliance')">
+            <i class="fa-solid fa-triangle-exclamation as-icon" style="color:var(--amber)"></i>
+            <div>
+              <div class="as-title">OISD-116 §4.3 — ESD Drill Overdue Q2 2024</div>
+              <div class="as-desc">Mandatory quarterly Emergency Shutdown Drill not conducted. Regulatory deadline approaching in 8 days.</div>
+              <div class="as-time">Jun 22, 2024 · 09:15 IST · Compliance Shield</div>
+            </div>
+            <span class="tag twarn" style="flex-shrink:0">WARNING</span>
+          </div>
+          <div class="alert-strip warn" onclick="sw('lessons')">
+            <i class="fa-solid fa-brain as-icon" style="color:var(--violet)"></i>
+            <div>
+              <div class="as-title">AI Pattern Match — Bearing Failure Recurrence Risk</div>
+              <div class="as-desc">System matched current PUMP-102A signature to Oct 2023 failure pattern. Same root cause (gland seal degradation) suspected in 3 units across site.</div>
+              <div class="as-time">Jun 22, 2024 · 11:42 IST · Lessons Engine</div>
+            </div>
+            <span class="tag tviol" style="flex-shrink:0">PATTERN</span>
+          </div>
+        </div>
+
+        <!-- Platform Stats -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-chart-bar" style="color:var(--amber)"></i> Platform Performance</div>
+            <div class="mini-stat"><span class="ms-label">Avg. Query Response Time</span><span class="ms-val" style="color:var(--emerald)">1.2s</span></div>
+            <div class="mini-stat"><span class="ms-label">Copilot Queries Today</span><span class="ms-val">142</span></div>
+            <div class="mini-stat"><span class="ms-label">Average Confidence Score</span><span class="ms-val" style="color:var(--amber)">91%</span></div>
+            <div class="mini-stat"><span class="ms-label">Citation Rate</span><span class="ms-val" style="color:var(--emerald)">98%</span></div>
+            <div class="mini-stat"><span class="ms-label">Docs Processed 24h</span><span class="ms-val">34</span></div>
+            <div class="mini-stat"><span class="ms-label">Knowledge Cliff Risk Index</span><span class="ms-val" style="color:var(--rose)">↓ 62%</span></div>
+          </div>
+          <div class="card" style="flex:1">
+            <div class="card-title"><i class="fa-solid fa-building" style="color:var(--sky)"></i> Problem Resolution Status</div>
+            <div class="mini-stat"><span class="ms-label">Info Fragmentation</span><span class="ms-val" style="color:var(--emerald)">Solved ✓</span></div>
+            <div class="mini-stat"><span class="ms-label">Knowledge Cliff Risk</span><span class="ms-val" style="color:var(--emerald)">Mitigated ✓</span></div>
+            <div class="mini-stat"><span class="ms-label">Unplanned Downtime (-18%)</span><span class="ms-val" style="color:var(--amb2)">In Progress</span></div>
+            <div class="mini-stat"><span class="ms-label">Cross-Function Discovery</span><span class="ms-val" style="color:var(--emerald)">Active ✓</span></div>
+          </div>
+        </div>
+
+        <!-- Quick Nav Cards -->
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="card-title" style="margin-bottom:0"><i class="fa-solid fa-grid-2" style="color:var(--amber)"></i> Jump To Module</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+            <div class="kpi a" style="padding:12px;cursor:pointer" onclick="sw('copilot')">
+              <i class="fa-solid fa-message" style="font-size:18px;color:var(--amber);margin-bottom:5px"></i>
+              <div style="font-size:11px;font-weight:700">Expert Copilot</div>
+              <div style="font-size:9.5px;color:var(--txt2)">RAG Q&A engine</div>
+            </div>
+            <div class="kpi e" style="padding:12px;cursor:pointer" onclick="sw('graph')">
+              <i class="fa-solid fa-circle-nodes" style="font-size:18px;color:var(--emerald);margin-bottom:5px"></i>
+              <div style="font-size:11px;font-weight:700">Knowledge Graph</div>
+              <div style="font-size:9.5px;color:var(--txt2)">Entity relationships</div>
+            </div>
+            <div class="kpi s" style="padding:12px;cursor:pointer" onclick="sw('compliance')">
+              <i class="fa-solid fa-shield-halved" style="font-size:18px;color:var(--sky);margin-bottom:5px"></i>
+              <div style="font-size:11px;font-weight:700">Compliance</div>
+              <div style="font-size:9.5px;color:var(--txt2)">PESO · OISD · BIS</div>
+            </div>
+            <div class="kpi r" style="padding:12px;cursor:pointer" onclick="sw('rca')">
+              <i class="fa-solid fa-wrench" style="font-size:18px;color:var(--rose);margin-bottom:5px"></i>
+              <div style="font-size:11px;font-weight:700">RCA Engine</div>
+              <div style="font-size:9.5px;color:var(--txt2)">Predictive maintenance</div>
+            </div>
+            <div class="kpi v" style="padding:12px;cursor:pointer" onclick="sw('lessons')" >
+              <i class="fa-solid fa-lightbulb" style="font-size:18px;color:var(--violet);margin-bottom:5px"></i>
+              <div style="font-size:11px;font-weight:700">Lessons Engine</div>
+              <div style="font-size:9.5px;color:var(--txt2)">Failure patterns</div>
+            </div>
+            <div class="kpi a" style="padding:12px;cursor:pointer;border-color:var(--border)" onclick="sw('ingestion')">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size:18px;color:var(--txt2);margin-bottom:5px"></i>
+              <div style="font-size:11px;font-weight:700">Ingestion</div>
+              <div style="font-size:9.5px;color:var(--txt2)">Doc pipeline</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!--══════════════ EXPERT COPILOT ══════════════-->
+  <div class="view" id="view-copilot">
+    <div class="copilot-wrap">
+      <div class="chat-pane">
+        <div class="cp-hdr">
+          <span class="cp-hdr-t"><i class="fa-solid fa-message" style="color:var(--amber);margin-right:6px"></i>RAG Conversation Feed</span>
+          <span class="live-badge"><span class="live-dot"></span>Simulated RAG Engine</span>
+        </div>
+        <div class="msgs" id="chat-box">
+          <div class="msg a fu">
+            <div class="mbubble">
+              <p>👋 I am your <strong>Industrial Knowledge Copilot</strong> — powered by RAG over <strong>1,420 indexed documents</strong>: P&IDs, OEM manuals, maintenance logs, work orders, SOPs, inspection reports, and regulatory codes.</p>
+              <p style="margin-top:8px">Ask me anything — I'll answer with <strong>source citations</strong> and <strong>confidence scores</strong>.</p>
+              <div class="conf-row" style="margin-top:10px">
+                <span class="conf-lbl">Corpus Coverage</span>
+                <div class="conf-track"><div class="conf-fill" style="width:94%;background:var(--emerald)"></div></div>
+                <span class="conf-val" style="color:var(--emerald)">94%</span>
+              </div>
+            </div>
+            <div class="mmeta">IND-AI · Just now · 1,420 docs indexed</div>
+          </div>
+        </div>
+        <div class="suggest-bar">
+          <span class="slbl">Try:</span>
+          <button class="schip" onclick="fq('What is the torque specification for Valve-V204?')">🔧 V204 torque spec</button>
+          <button class="schip" onclick="fq('Show failure history for Pump-102A')">📊 Pump-102A history</button>
+          <button class="schip" onclick="fq('What are OISD-116 shutdown requirements?')">🛡️ OISD-116 ESD</button>
+          <button class="schip" onclick="fq('Summarise latest inspection for HX-301')">📋 HX-301 report</button>
+          <button class="schip" onclick="fq('What is the PESO hot work permit procedure?')">🔥 Hot work permit</button>
+          <button class="schip" onclick="fq('Which maintenance technician worked on CDU-Unit-1 last?')">👷 CDU-Unit-1 history</button>
+        </div>
+        <div class="cinput-wrap">
+          <form onsubmit="handleQ(event)" class="cinput-row">
+            <input id="uinput" class="cinput" type="text" autocomplete="off"
+              placeholder="Query plant manuals, P&IDs, maintenance records, compliance regulations…"/>
+            <button type="button" class="csend" style="background:var(--bg2);color:var(--amber);border:1px solid var(--border);" title="Voice-enabled query"><i class="fa-solid fa-microphone"></i></button>
+            <button type="submit" class="csend"><i class="fa-solid fa-paper-plane"></i></button>
+          </form>
+        </div>
+      </div>
+
+      <div class="copilot-side">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-triangle-exclamation" style="color:var(--rose)"></i>Asset Health Watchlist</div>
+          <div class="asset-it">
+            <div class="ai-row"><span class="ai-id">PUMP-102A</span><span class="tag tcrit">CRITICAL</span></div>
+            <div class="ai-desc">High vibration · Bearing failure predicted</div>
+            <div class="ai-bar"><div class="ai-fill" style="width:87%;background:var(--rose)"></div></div>
+          </div>
+          <div class="asset-it">
+            <div class="ai-row"><span class="ai-id">VALVE-V204</span><span class="tag twarn">WARNING</span></div>
+            <div class="ai-desc">Seals at end-of-life · 63% degradation</div>
+            <div class="ai-bar"><div class="ai-fill" style="width:63%;background:var(--amber)"></div></div>
+          </div>
+          <div class="asset-it">
+            <div class="ai-row"><span class="ai-id">HX-301</span><span class="tag tok">NOMINAL</span></div>
+            <div class="ai-desc">Within all operating parameters</div>
+            <div class="ai-bar"><div class="ai-fill" style="width:28%;background:var(--emerald)"></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-folder-open" style="color:var(--sky)"></i>Recent Sources</div>
+          <div class="doc-it"><i class="fa-solid fa-file-pdf" style="color:#ef4444;font-size:13px"></i><span style="font-size:10.5px;font-family:var(--mono);flex:1">OEM-Valve-Manual-Rev3.pdf</span><span class="tag tinfo" style="font-size:8px">PDF</span></div>
+          <div class="doc-it"><i class="fa-solid fa-file-excel" style="color:#22c55e;font-size:13px"></i><span style="font-size:10.5px;font-family:var(--mono);flex:1">Maint-Log-Oct23.xlsx</span><span class="tag tok" style="font-size:8px">XLS</span></div>
+          <div class="doc-it"><i class="fa-solid fa-file-image" style="color:var(--sky);font-size:13px"></i><span style="font-size:10.5px;font-family:var(--mono);flex:1">PID-Crude-Unit-Rev8.dwg</span><span class="tag tinfo" style="font-size:8px">P&ID</span></div>
+          <div class="doc-it"><i class="fa-solid fa-file-lines" style="color:var(--violet);font-size:13px"></i><span style="font-size:10.5px;font-family:var(--mono);flex:1">OISD-116-Shutdown.pdf</span><span class="tag tviol" style="font-size:8px">REG</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-chart-line" style="color:var(--violet)"></i>Query Stats</div>
+          <div class="mini-stat"><span class="ms-label" style="font-size:10.5px">Queries today</span><span class="ms-val" style="font-size:11px">142</span></div>
+          <div class="mini-stat"><span class="ms-label" style="font-size:10.5px">Avg response</span><span class="ms-val" style="font-size:11px;color:var(--emerald)">1.2s</span></div>
+          <div class="mini-stat"><span class="ms-label" style="font-size:10.5px">Avg confidence</span><span class="ms-val" style="font-size:11px;color:var(--amber)">91%</span></div>
+          <div class="mini-stat"><span class="ms-label" style="font-size:10.5px">Citation rate</span><span class="ms-val" style="font-size:11px;color:var(--sky)">98%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--══════════════ KNOWLEDGE GRAPH ══════════════-->
+  <div class="view" id="view-graph">
+    <div class="gview">
+      <div class="sec-hdr">
+        <div class="sec-title"><i class="fa-solid fa-circle-nodes"></i>Knowledge Graph — Entity Relationship Map</div>
+        <button class="sec-act">Refresh ↻</button>
+      </div>
+      <div class="g-stats">
+        <div class="gstat a"><div class="gstat-val" style="color:var(--amber)">8,341</div><div class="gstat-lbl">Graph Nodes</div><div class="gstat-delta du"><i class="fa-solid fa-arrow-up"></i> +234 this week</div></div>
+        <div class="gstat e"><div class="gstat-val" style="color:var(--emerald)">24,892</div><div class="gstat-lbl">Relationships</div><div class="gstat-delta du"><i class="fa-solid fa-arrow-up"></i> +1,140 this week</div></div>
+        <div class="gstat s"><div class="gstat-val" style="color:var(--sky)">1,420</div><div class="gstat-lbl">Documents Indexed</div><div class="gstat-delta du"><i class="fa-solid fa-arrow-up"></i> +12 today</div></div>
+        <div class="gstat v"><div class="gstat-val" style="color:var(--violet)">98.2%</div><div class="gstat-lbl">Entity Coverage</div><div class="gstat-delta du"><i class="fa-solid fa-arrow-up"></i> +0.4% this month</div></div>
+      </div>
+      <div class="g-canvas-wrap">
+        <canvas id="gcanvas"></canvas>
+        <div class="g-legend">
+          <div class="gl-item"><div class="gl-dot" style="background:var(--amber)"></div>Equipment</div>
+          <div class="gl-item"><div class="gl-dot" style="background:var(--emerald)"></div>Documents</div>
+          <div class="gl-item"><div class="gl-dot" style="background:var(--sky)"></div>Regulations</div>
+          <div class="gl-item"><div class="gl-dot" style="background:var(--rose)"></div>Incidents</div>
+          <div class="gl-item"><div class="gl-dot" style="background:var(--violet)"></div>Personnel</div>
+        </div>
+      </div>
+      <div class="g-bottom">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-tags" style="color:var(--amber)"></i>Top Extracted Entities</div>
+          <table class="etable">
+            <thead><tr><th>Entity Tag</th><th>Type</th><th>Occurrences</th><th>Sources</th></tr></thead>
+            <tbody>
+              <tr><td>CDU-UNIT-1</td><td><span class="tag twarn">System</span></td><td>421</td><td>45</td></tr>
+              <tr><td>PUMP-102A</td><td><span class="tag tcrit">Equipment</span></td><td>342</td><td>28</td></tr>
+              <tr><td>VALVE-V204</td><td><span class="tag twarn">Equipment</span></td><td>217</td><td>19</td></tr>
+              <tr><td>OISD-116</td><td><span class="tag tinfo">Regulation</span></td><td>198</td><td>34</td></tr>
+              <tr><td>HX-301</td><td><span class="tag tok">Equipment</span></td><td>156</td><td>12</td></tr>
+              <tr><td>PESO-2000</td><td><span class="tag tinfo">Regulation</span></td><td>143</td><td>22</td></tr>
+              <tr><td>Eng. R. Sharma</td><td><span class="tag tviol">Personnel</span></td><td>87</td><td>31</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-link" style="color:var(--sky)"></i>Recent Graph Updates</div>
+          <div class="asset-it">
+            <div class="ai-row"><span style="font-size:10.5px;color:var(--txt1)">PUMP-102A ↔ WO-2024-0831</span><span class="tag tcrit" style="font-size:8px">NEW</span></div>
+            <div class="ai-desc">Work order linked via bearing failure event</div>
+          </div>
+          <div class="asset-it">
+            <div class="ai-row"><span style="font-size:10.5px;color:var(--txt1)">VALVE-V204 ↔ OEM-Rev3</span><span class="tag tok" style="font-size:8px">UPDATED</span></div>
+            <div class="ai-desc">Torque spec re-indexed from revised OEM PDF</div>
+          </div>
+          <div class="asset-it">
+            <div class="ai-row"><span style="font-size:10.5px;color:var(--txt1)">OISD-116 ↔ SOP-CDU-22</span><span class="tag tinfo" style="font-size:8px">LINKED</span></div>
+            <div class="ai-desc">Shutdown SOP mapped to regulation clause §4.3</div>
+          </div>
+          <div class="asset-it">
+            <div class="ai-row"><span style="font-size:10.5px;color:var(--txt1)">HX-301 ↔ Insp-Jun2024</span><span class="tag tok" style="font-size:8px">INGESTED</span></div>
+            <div class="ai-desc">Inspection report auto-linked to asset record</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--══════════════ COMPLIANCE SHIELD ══════════════-->
+  <div class="view" id="view-compliance">
+    <div class="compv">
+      <div class="sec-hdr">
+        <div class="sec-title"><i class="fa-solid fa-shield-halved"></i>Compliance Shield — PESO · OISD · Factories Act · BIS · CPCB</div>
+        <button class="sec-act" onclick="alert('Generating audit evidence package — PDF with gap list, citations, and corrective action plan.')">Export Audit Package ↗</button>
+      </div>
+      <div class="auto-pack">
+        <div>
+          <div class="ap-title">🤖 Auto-Audit Package Generator</div>
+          <div class="ap-desc">AI agent maps regulatory requirements against current procedures, equipment states, and inspection records — auto-generating evidence packages for audits and flagging quality deviations before they escalate.</div>
+        </div>
+        <button class="ap-btn" onclick="alert('Audit package generated: ComplianceEvidence_Jamnagar_Jun2024.pdf')"><i class="fa-solid fa-file-export"></i> Generate Now</button>
+      </div>
+      <div class="comp-scores">
+        <div class="cscore-card"><div class="ring-wrap"><svg class="ring-svg" width="64" height="64" viewBox="0 0 64 64"><circle class="rtrack" cx="32" cy="32" r="27"/><circle class="rfill" cx="32" cy="32" r="27" stroke="var(--rose)" stroke-dasharray="169.6" stroke-dashoffset="51"/></svg><div class="ring-lbl" style="color:var(--rose)">70%</div></div><div class="ct">PESO 2000</div><div class="cs">Petroleum Safety</div></div>
+        <div class="cscore-card"><div class="ring-wrap"><svg class="ring-svg" width="64" height="64" viewBox="0 0 64 64"><circle class="rtrack" cx="32" cy="32" r="27"/><circle class="rfill" cx="32" cy="32" r="27" stroke="var(--amber)" stroke-dasharray="169.6" stroke-dashoffset="25"/></svg><div class="ring-lbl" style="color:var(--amber)">85%</div></div><div class="ct">OISD-116</div><div class="cs">Shutdown Proc</div></div>
+        <div class="cscore-card"><div class="ring-wrap"><svg class="ring-svg" width="64" height="64" viewBox="0 0 64 64"><circle class="rtrack" cx="32" cy="32" r="27"/><circle class="rfill" cx="32" cy="32" r="27" stroke="var(--emerald)" stroke-dasharray="169.6" stroke-dashoffset="10"/></svg><div class="ring-lbl" style="color:var(--emerald)">94%</div></div><div class="ct">Factories Act</div><div class="cs">Safety Regulations</div></div>
+        <div class="cscore-card"><div class="ring-wrap"><svg class="ring-svg" width="64" height="64" viewBox="0 0 64 64"><circle class="rtrack" cx="32" cy="32" r="27"/><circle class="rfill" cx="32" cy="32" r="27" stroke="var(--sky)" stroke-dasharray="169.6" stroke-dashoffset="17"/></svg><div class="ring-lbl" style="color:var(--sky)">90%</div></div><div class="ct">OISD-137</div><div class="cs">Fire Safety</div></div>
+        <div class="cscore-card"><div class="ring-wrap"><svg class="ring-svg" width="64" height="64" viewBox="0 0 64 64"><circle class="rtrack" cx="32" cy="32" r="27"/><circle class="rfill" cx="32" cy="32" r="27" stroke="var(--violet)" stroke-dasharray="169.6" stroke-dashoffset="34"/></svg><div class="ring-lbl" style="color:var(--violet)">80%</div></div><div class="ct">CPCB Norms</div><div class="cs">Environmental</div></div>
+      </div>
+      <div class="comp-two">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-triangle-exclamation" style="color:var(--rose)"></i>Active Compliance Gaps — 3 Critical</div>
+          <div class="gap-it crit">
+            <i class="fa-solid fa-circle-xmark gi-icon" style="color:var(--rose)"></i>
+            <div><div class="git">PESO Clause 12.4 — Hot Work Permit Expired</div><div class="gid">Hot work permit for CDU-Unit-1 flange replacement expired 3 days ago. Work is ongoing without valid authorisation. Immediate permit re-issuance and work suspension required.</div></div>
+            <span class="tag tcrit" style="flex-shrink:0">CRITICAL</span>
+          </div>
+          <div class="gap-it crit">
+            <i class="fa-solid fa-circle-xmark gi-icon" style="color:var(--rose)"></i>
+            <div><div class="git">OISD-116 §4.3 — ESD Drill Not Conducted Q2 2024</div><div class="gid">Mandatory quarterly Emergency Shutdown Drill not conducted. Documentation gap detected. Drill must be scheduled and completed within 8 days.</div></div>
+            <span class="tag tcrit" style="flex-shrink:0">CRITICAL</span>
+          </div>
+          <div class="gap-it crit">
+            <i class="fa-solid fa-circle-xmark gi-icon" style="color:var(--rose)"></i>
+            <div><div class="git">OISD-147 — Heat Exchanger Inspection Certificate Lapse</div><div class="gid">Statutory inspection certificate for HX-304 expired Jun 15. Unit still in operation. Inspection must be conducted and certificate renewed before further operation.</div></div>
+            <span class="tag tcrit" style="flex-shrink:0">CRITICAL</span>
+          </div>
+          <div class="gap-it warn">
+            <i class="fa-solid fa-triangle-exclamation gi-icon" style="color:var(--amber)"></i>
+            <div><div class="git">Factories Act §7B — Safety Officer Cert Renewal Due</div><div class="gid">Safety officer certification renewal due in 18 days. Competency certificate last renewed Jan 2021. Initiate renewal with DGFASLI immediately.</div></div>
+            <span class="tag twarn" style="flex-shrink:0">WARNING</span>
+          </div>
+          <div class="gap-it ok">
+            <i class="fa-solid fa-circle-check gi-icon" style="color:var(--emerald)"></i>
+            <div><div class="git">PESO — Pressure Vessel Inspection — Compliant</div><div class="gid">All 34 registered pressure vessels inspected and certified. Next statutory inspection due Q4 2024. Full documentation available.</div></div>
+            <span class="tag tok" style="flex-shrink:0">OK</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-calendar-check" style="color:var(--emerald)"></i>Upcoming Compliance Actions</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="asset-it">
+              <div class="ai-row"><span style="font-size:11px;font-weight:700;color:var(--rose)">URGENT — Today</span></div>
+              <div class="ai-desc">Re-issue Hot Work Permit for CDU-Unit-1 (PESO §12.4)</div>
+            </div>
+            <div class="asset-it">
+              <div class="ai-row"><span style="font-size:11px;font-weight:700;color:var(--rose)">8 Days</span></div>
+              <div class="ai-desc">Schedule Q2 2024 ESD Drill (OISD-116 §4.3)</div>
+            </div>
+            <div class="asset-it">
+              <div class="ai-row"><span style="font-size:11px;font-weight:700;color:var(--amber)">18 Days</span></div>
+              <div class="ai-desc">Safety Officer Cert Renewal — DGFASLI (Factories Act §7B)</div>
+            </div>
+            <div class="asset-it">
+              <div class="ai-row"><span style="font-size:11px;font-weight:700;color:var(--sky)">Dec 2024</span></div>
+              <div class="ai-desc">Next statutory pressure vessel inspection (PESO)</div>
+            </div>
+            <div class="asset-it">
+              <div class="ai-row"><span style="font-size:11px;font-weight:700;color:var(--sky)">Q4 2024</span></div>
+              <div class="ai-desc">CPCB Stack Emission Monitoring Report submission</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--══════════════ MAINTENANCE & RCA ══════════════-->
+  <div class="view" id="view-rca">
+    <div class="rcav">
+      <div class="sec-hdr">
+        <div class="sec-title"><i class="fa-solid fa-wrench"></i>Maintenance Intelligence & Root Cause Analysis</div>
+        <button class="sec-act">Generate Maintenance Report ↗</button>
+      </div>
+
+      <div class="rca-top">
+        <div class="rca-alert">
+          <div class="ra-left">
+            <i class="fa-solid fa-triangle-exclamation ra-icon"></i>
+            <div>
+              <div class="ra-eq">PUMP-102A</div>
+              <div class="ra-status">Predicted failure: <strong style="color:var(--rose)">72–96 hours</strong> · Bearing race defect (BPFO pattern at 38 Hz)</div>
+            </div>
+          </div>
+          <div class="health-ring">
+            <svg style="transform:rotate(-90deg)" width="70" height="70" viewBox="0 0 70 70">
+              <circle fill="none" stroke="var(--border)" stroke-width="6" cx="35" cy="35" r="29"/>
+              <circle fill="none" stroke="var(--rose)" stroke-width="6" stroke-linecap="round" cx="35" cy="35" r="29"
+                stroke-dasharray="182" stroke-dashoffset="158"/>
+            </svg>
+            <div class="health-lbl"><div class="health-val">13%</div><div class="health-txt">health</div></div>
+          </div>
+        </div>
+        <div class="pred-card">
+          <div class="pred-title"><i class="fa-solid fa-brain" style="color:var(--violet)"></i>AI Recommendations</div>
+          <div class="pred-meter">
+            <div class="pm-lbl"><span>Health Degradation</span><span style="color:var(--rose)">87% consumed</span></div>
+            <div class="pm-track"><div class="pm-fill" style="width:87%"></div></div>
+          </div>
+          <div class="action-list">
+            <div class="action-item"><i class="fa-solid fa-calendar-check"></i>Schedule emergency bearing inspection</div>
+            <div class="action-item"><i class="fa-solid fa-file-circle-plus"></i>Auto-create WO-2024-0831</div>
+            <div class="action-item"><i class="fa-solid fa-warehouse"></i>Check SKF 6314-2RS stock</div>
+            <div class="action-item"><i class="fa-solid fa-bell"></i>Alert maintenance supervisor</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mtabs">
+        <button class="mtab on" onclick="mtab(this,'tl-section')">Failure Timeline</button>
+        <button class="mtab" onclick="mtab(this,'fleet-section')">Fleet Health Table</button>
+        <button class="mtab" onclick="mtab(this,'rca-tree')">RCA Causal Chain</button>
+      </div>
+
+      <div id="tl-section" class="card">
+        <div class="card-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--amber)"></i>PUMP-102A — Equipment Failure History</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot crit"><i class="fa-solid fa-bolt"></i></div>
+            <div class="tl-body">
+              <div class="tl-date">22 Jun 2024 — Active Alert</div>
+              <div class="tl-title">⚠️ High Vibration — Bearing Failure Imminent (72–96 hr window)</div>
+              <div class="tl-desc">Vibration amplitude 14.2 mm/s RMS (2.8× baseline). Sub-synchronous component at 38 Hz matches Ball Pass Frequency Outer (BPFO) bearing defect signature. Oil analysis shows elevated Fe particles (320 ppm vs 80 ppm baseline). AI confidence: 94%.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot warn"><i class="fa-solid fa-temperature-half"></i></div>
+            <div class="tl-body">
+              <div class="tl-date">Oct 2023 — Historical Failure</div>
+              <div class="tl-title">Bearing Failure — Root Cause: Water Ingress → Grease Hardening</div>
+              <div class="tl-desc">Bearing failed at 18 months (OEM MTBF: 48 months). Post-mortem: water ingress via degraded shaft gland seal → grease contamination → grease hardening → bearing race failure. Replacement: SKF 6314-2RS. <em>Source: Maint-Log-Oct2023.xlsx Row 142</em></div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot info"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <div class="tl-body">
+              <div class="tl-date">Apr 2022</div>
+              <div class="tl-title">Planned Inspection — 12% Impeller Wear Found, Alignment Adjusted</div>
+              <div class="tl-desc">Routine 12-month inspection. Impeller wear 12% (limit: 15%). Shaft alignment corrected to 0.03 mm (within 0.05 mm tolerance). Vibration within limits at time of inspection. Gland seal condition not noted. <em>Root cause insight: gland seal degradation likely begun here.</em></div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot ok"><i class="fa-solid fa-check"></i></div>
+            <div class="tl-body">
+              <div class="tl-date">Jan 2021 — Commissioning</div>
+              <div class="tl-title">PUMP-102A Commissioned — All Parameters Nominal</div>
+              <div class="tl-desc">Commissioned per OEM procedure. Baseline vibration: 5.1 mm/s RMS. Shaft alignment: 0.02 mm. Bearing temperature: 42°C (limit: 80°C). Gland seal new. Full commissioning record: WO-2021-0012.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="fleet-section" class="card" style="display:none">
+        <div class="card-title"><i class="fa-solid fa-table" style="color:var(--sky)"></i>Full Plant Fleet Health Overview</div>
+        <div class="asset-table-wrap">
+          <table class="at">
+            <thead><tr><th>Asset ID</th><th>Type</th><th>Health</th><th>Trend</th><th>Last Inspection</th><th>Next PM Due</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>PUMP-102A</td><td>Centrifugal Pump</td><td><div class="hbar"><div class="hbar-fill" style="width:13%;background:var(--rose)"></div></div></td><td style="color:var(--rose)">↘ Falling</td><td>Mar 2024</td><td>Overdue</td><td><span class="tag tcrit">CRITICAL</span></td></tr>
+              <tr><td>VALVE-V204</td><td>HP Ball Valve</td><td><div class="hbar"><div class="hbar-fill" style="width:37%;background:var(--amber)"></div></div></td><td style="color:var(--amber)">→ Stable</td><td>Jan 2024</td><td>Aug 2024</td><td><span class="tag twarn">WARNING</span></td></tr>
+              <tr><td>HX-301</td><td>Shell-Tube HX</td><td><div class="hbar"><div class="hbar-fill" style="width:72%;background:var(--emerald)"></div></div></td><td style="color:var(--emerald)">↗ Good</td><td>Jun 2024</td><td>Dec 2024</td><td><span class="tag tok">NOMINAL</span></td></tr>
+              <tr><td>CDU-UNIT-1</td><td>Crude Distil. Unit</td><td><div class="hbar"><div class="hbar-fill" style="width:81%;background:var(--emerald)"></div></div></td><td style="color:var(--emerald)">→ Stable</td><td>Feb 2024</td><td>Sep 2024</td><td><span class="tag tok">NOMINAL</span></td></tr>
+              <tr><td>COMP-201</td><td>Reciprocating Comp</td><td><div class="hbar"><div class="hbar-fill" style="width:55%;background:var(--amber)"></div></div></td><td style="color:var(--amber)">↘ Watching</td><td>Apr 2024</td><td>Oct 2024</td><td><span class="tag twarn">MONITOR</span></td></tr>
+              <tr><td>HX-304</td><td>Shell-Tube HX</td><td><div class="hbar"><div class="hbar-fill" style="width:60%;background:var(--amber)"></div></div></td><td style="color:var(--amber)">→ Stable</td><td>Expired</td><td>Overdue</td><td><span class="tag tcrit">CERT LAPSED</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="rca-tree" class="card" style="display:none">
+        <div class="card-title"><i class="fa-solid fa-diagram-project" style="color:var(--violet)"></i>RCA Causal Chain — PUMP-102A Bearing Failure (Recurring)</div>
+        <div style="font-size:12px;line-height:1.8;color:var(--txt2);padding:8px 0">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:8px;padding:10px 14px">
+              <strong style="color:var(--rose)">EFFECT:</strong> Unplanned bearing failure — 36 hours production loss, Rs. 4.2 Cr cost
+            </div>
+            <div style="text-align:center;color:var(--border2);font-size:18px">↑</div>
+            <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:10px 14px">
+              <strong style="color:var(--amber)">SYMPTOM:</strong> Vibration escalation from 5.1 → 14.2 mm/s RMS over 90 days
+            </div>
+            <div style="text-align:center;color:var(--border2);font-size:18px">↑</div>
+            <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:10px 14px">
+              <strong style="color:var(--sky)">PROXIMATE CAUSE:</strong> Bearing race fatigue — accelerated by grease contamination
+            </div>
+            <div style="text-align:center;color:var(--border2);font-size:18px">↑</div>
+            <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px 14px">
+              <strong style="color:var(--emerald)">ROOT CAUSE:</strong> Water ingress through degraded shaft gland seal (coastal humid environment) → grease saponification
+            </div>
+            <div style="text-align:center;color:var(--border2);font-size:18px">↑</div>
+            <div style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.2);border-radius:8px;padding:10px 14px">
+              <strong style="color:var(--violet)">SYSTEMIC CAUSE:</strong> OEM gland seal design inadequate for coastal RH &gt;85%. Same failure in 3 units (JMN, MUB, HZR). Seal spec upgrade required plant-wide.
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:12px;background:var(--ambg);border:1px solid rgba(245,158,11,.25);border-radius:8px">
+            <strong style="color:var(--amber)">AI Systemic Pattern:</strong> Lessons Engine identified this pattern across 14 incidents in 3 refineries (2021–2024). Mean time between failures: 18.3 months vs OEM 48-month MTBF. Corrective Action: Upgrade to IP-68 rated polymer gland seal (Part# GS-7700-IP68).
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--══════════════ LESSONS LEARNED ══════════════-->
+  <div class="view" id="view-lessons">
+    <div class="lview">
+      <div class="sec-hdr">
+        <div class="sec-title"><i class="fa-solid fa-lightbulb"></i>Lessons Learned & Failure Intelligence Engine</div>
+        <button class="sec-act">Push Alerts to Field Teams ↗</button>
+      </div>
+      <div class="ai-scan-bar">
+        <i class="fa-solid fa-robot asb-icon"></i>
+        <div>
+          <div class="asb-title">AI Pattern Detection Engine — Active</div>
+          <div class="asb-desc">Continuously scanning incident reports, near-miss logs, audit findings, and external OISD industry databases for systemic failure patterns invisible to individual site teams. <strong style="color:var(--amber)">2 new patterns detected this week.</strong></div>
+        </div>
+      </div>
+      <div class="impact-row">
+        <div class="impact-card">
+          <div class="ic-val" style="color:var(--rose)">14</div>
+          <div class="ic-lbl">Similar incidents cross-matched</div>
+        </div>
+        <div class="impact-card">
+          <div class="ic-val" style="color:var(--amber)">3</div>
+          <div class="ic-lbl">Refineries showing same pattern</div>
+        </div>
+        <div class="impact-card">
+          <div class="ic-val" style="color:var(--emerald)">₹18Cr</div>
+          <div class="ic-lbl">Estimated loss if unaddressed</div>
+        </div>
+      </div>
+      <div class="lessons-grid">
+        <div class="lesson">
+          <span class="ltag lt-inc">Incident Pattern</span>
+          <div class="ltitle">Centrifugal Pump Bearing Failure — Coastal Humidity Pattern</div>
+          <div class="ldesc">Analysis of 14 bearing failure incidents across 3 Reliance refineries (2021–2024). Consistent root cause: shaft gland seal degradation in coastal RH &gt;85% environments. MTBF: 18.3 months vs OEM 48-month rating. Pattern was invisible to each individual site — only visible in aggregated cross-site data.</div>
+          <div class="lmeta"><span class="lsite">JMN / MUB / HZR</span><span class="lsev" style="color:var(--rose)"><i class="fa-solid fa-circle" style="font-size:7px"></i> HIGH IMPACT</span></div>
+        </div>
+        <div class="lesson">
+          <span class="ltag lt-nm">Near-Miss Pattern</span>
+          <div class="ltitle">Hot Work Permit Lapse → Hydrocarbon Release Risk</div>
+          <div class="ldesc">Cross-referencing 9 near-miss events with PESO audit records reveals 7 occurred within 48 hours of permit expiry. Pattern invisible to individual site teams. Recommend: automated permit expiry alerting 24h before lapse with mandatory supervisor acknowledgment.</div>
+          <div class="lmeta"><span class="lsite">Industry-Wide (OISD DB)</span><span class="lsev" style="color:var(--rose)"><i class="fa-solid fa-circle" style="font-size:7px"></i> HIGH IMPACT</span></div>
+        </div>
+        <div class="lesson">
+          <span class="ltag lt-aud">Audit Finding</span>
+          <div class="ltitle">P&ID vs. Field Mismatch — Instrument Air Lines</div>
+          <div class="ldesc">Q1 2024 audit uncovered 23 instances where instrument air line routing in P&IDs does not match field installation — creating latent risk for emergency blowdown failures. AI Computer Vision-based P&ID digitisation with auto-validation against field scan data recommended.</div>
+          <div class="lmeta"><span class="lsite">JMN-REF Unit 4</span><span class="lsev" style="color:var(--amber)"><i class="fa-solid fa-circle" style="font-size:7px"></i> MEDIUM IMPACT</span></div>
+        </div>
+        <div class="lesson">
+          <span class="ltag lt-qnc">Quality NC</span>
+          <div class="ltitle">Weld NCR Rate Spikes 2.4× During Monsoon Season</div>
+          <div class="ldesc">Statistical QMS analysis 2019–2024 shows weld non-conformance rate increases 2.4× during June–September (humidity &gt;85% RH). Pre-qualification humidity check protocol not consistently enforced. System now auto-flags work orders for humidity check when RH forecast exceeds threshold.</div>
+          <div class="lmeta"><span class="lsite">JMN Fabrication Shop</span><span class="lsev" style="color:var(--amber)"><i class="fa-solid fa-circle" style="font-size:7px"></i> MEDIUM IMPACT</span></div>
+        </div>
+        <div class="lesson">
+          <span class="ltag lt-pat">Systemic Pattern</span>
+          <div class="ltitle">Knowledge Cliff Risk — 25% Engineer Retirement Wave</div>
+          <div class="ldesc">Platform has captured 8,341 expert knowledge nodes from operational data, significantly reducing the risk from engineer retirement. 312 undocumented procedures have been extracted from email archives and converted to structured SOPs via the ingestion pipeline.</div>
+          <div class="lmeta"><span class="lsite">Organisation-Wide</span><span class="lsev" style="color:var(--emerald)"><i class="fa-solid fa-circle" style="font-size:7px"></i> MITIGATED</span></div>
+        </div>
+        <div class="lesson">
+          <span class="ltag lt-inc">Failure Pattern</span>
+          <div class="ltitle">Relief Valve Chatter Preceding Pressure Build Events</div>
+          <div class="ldesc">Analysis of 6 overpressure near-misses found all were preceded by intermittent relief valve chatter 48–72h earlier. Chatter was logged as "normal maintenance noise" and not escalated. AI now flags chatter events on RV-series valves as priority inspection triggers.</div>
+          <div class="lmeta"><span class="lsite">JMN Units 2 & 5</span><span class="lsev" style="color:var(--rose)"><i class="fa-solid fa-circle" style="font-size:7px"></i> HIGH IMPACT</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--══════════════ P&ID VISION ══════════════-->
+  <div class="view" id="view-pid">
+    <div class="ingv">
+      <div class="sec-hdr">
+        <div class="sec-title"><i class="fa-solid fa-eye"></i>Computer Vision — P&ID Digitisation</div>
+        <button class="sec-act">Upload New Drawing ↗</button>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:14px;height:calc(100vh - 120px)">
+        <div style="display:flex;gap:14px;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border)">
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:700">PID-Crude-Unit-Rev8.dwg</div>
+            <div style="font-size:11px;color:var(--txt2);margin-top:4px">Processed by CV Engine • 42 Entities Extracted • 98% Confidence</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <span class="tag tok">VERIFIED</span>
+            <span class="tag tinfo">SYNCED TO GRAPH</span>
+          </div>
+        </div>
+        <div style="flex:1;background:var(--bg0);border-radius:8px;position:relative;overflow:hidden;border:1px solid var(--border);display:flex;align-items:center;justify-content:center">
+          <div style="position:relative;width:80%;height:80%;background:rgba(255,255,255,0.02);border:1px dashed var(--border2)">
+             <div style="position:absolute;top:20%;left:30%;width:120px;height:80px;border:2px solid var(--emerald);background:rgba(16,185,129,0.1);display:flex;align-items:flex-end;padding:4px;transition:0.3s;cursor:pointer" onmouseover="this.style.background='rgba(16,185,129,0.3)'" onmouseout="this.style.background='rgba(16,185,129,0.1)'"><span style="font-size:10px;font-family:var(--mono);color:var(--emerald);background:var(--bg0);padding:2px 4px;border-radius:2px">HX-301</span></div>
+             <div style="position:absolute;top:50%;left:60%;width:80px;height:80px;border:2px solid var(--rose);background:rgba(244,63,94,0.1);display:flex;align-items:flex-end;padding:4px;transition:0.3s;cursor:pointer" onmouseover="this.style.background='rgba(244,63,94,0.3)'" onmouseout="this.style.background='rgba(244,63,94,0.1)'"><span style="font-size:10px;font-family:var(--mono);color:var(--rose);background:var(--bg0);padding:2px 4px;border-radius:2px">PUMP-102A</span></div>
+             <div style="position:absolute;top:40%;left:45%;width:40px;height:40px;border:2px solid var(--amber);background:rgba(245,158,11,0.1);display:flex;align-items:flex-end;padding:4px;transition:0.3s;cursor:pointer" onmouseover="this.style.background='rgba(245,158,11,0.3)'" onmouseout="this.style.background='rgba(245,158,11,0.1)'"><span style="font-size:10px;font-family:var(--mono);color:var(--amber);background:var(--bg0);padding:2px 4px;border-radius:2px">V204</span></div>
+             <!-- Connecting line -->
+             <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+               <path d="M 30% 25% L 45% 40% L 60% 55%" fill="none" stroke="var(--sky)" stroke-width="2" stroke-dasharray="4" />
+             </svg>
+             <div style="position:absolute;top:5%;left:5%;font-size:12px;color:var(--txt3)"><i class="fa-solid fa-image"></i> Simulated P&ID View with Extracted Bounding Boxes</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px">
+          <div class="mini-stat" style="flex:1;background:var(--bg3);padding:10px;border-radius:8px;border:none"><span class="ms-label">Equipment Detected</span><span class="ms-val" style="color:var(--emerald)">18</span></div>
+          <div class="mini-stat" style="flex:1;background:var(--bg3);padding:10px;border-radius:8px;border:none"><span class="ms-label">Valves Detected</span><span class="ms-val" style="color:var(--amber)">24</span></div>
+          <div class="mini-stat" style="flex:1;background:var(--bg3);padding:10px;border-radius:8px;border:none"><span class="ms-label">Piping Runs Mapped</span><span class="ms-val" style="color:var(--sky)">12</span></div>
+          <div class="mini-stat" style="flex:1;background:var(--bg3);padding:10px;border-radius:8px;border:none"><span class="ms-label">Anomalies</span><span class="ms-val" style="color:var(--rose)">1 (V204 mismatch)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--══════════════ DOC INGESTION ══════════════-->
+  <div class="view" id="view-ingestion">
+    <div class="ingv">
+      <div class="sec-hdr">
+        <div class="sec-title"><i class="fa-solid fa-cloud-arrow-up"></i>Universal Document Ingestion Pipeline</div>
+        <button class="sec-act">View Ingestion Logs ↗</button>
+      </div>
+      <div class="ingest-two">
+        <div>
+          <div class="drop-zone" onclick="alert('Upload dialog — connect to backend ingestion API. Supports PDF, P&ID DWG/SVG, XLS, DOCX, scanned images, and email archives.')">
+            <div class="dz-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
+            <div class="dz-title">Drop Documents or Click to Upload</div>
+            <div class="dz-sub">AI processes heterogeneous industrial document formats automatically</div>
+            <div class="ftypes">
+              <span class="ftype">📄 PDF</span>
+              <span class="ftype">📊 XLSX</span>
+              <span class="ftype">🖼️ P&ID DWG</span>
+              <span class="ftype">📝 DOCX</span>
+              <span class="ftype">🔍 Scanned Images</span>
+              <span class="ftype">📧 Email Archives</span>
+              <span class="ftype">📋 XML/JSON</span>
+              <span class="ftype">🗃️ SAP Export</span>
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <div class="card-title" style="margin-bottom:10px"><i class="fa-solid fa-diagram-project" style="color:var(--sky)"></i>AI Processing Pipeline</div>
+            <div class="pipeline">
+              <div class="pstage act"><div class="ps-icon">📥</div><div class="ps-title">Ingestion</div><div class="ps-desc">Multi-format parsing & OCR / CV</div></div>
+              <div class="pstage"    ><div class="ps-icon" style="color:var(--sky)">🏷️</div><div class="ps-title">Entity Extraction</div><div class="ps-desc">NER: equipment, params, regs, people</div></div>
+              <div class="pstage"    ><div class="ps-icon" style="color:var(--violet)">🕸️</div><div class="ps-title">Graph Building</div><div class="ps-desc">Relationship & ontology mapping</div></div>
+              <div class="pstage"    ><div class="ps-icon" style="color:var(--emerald)">🔢</div><div class="ps-title">Embedding</div><div class="ps-desc">Semantic vectors for RAG retrieval</div></div>
+              <div class="pstage"    ><div class="ps-icon" style="color:var(--amber)">✅</div><div class="ps-title">Publish</div><div class="ps-desc">Live in Copilot, Graph & Compliance</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-chart-pie" style="color:var(--amber)"></i>Corpus Breakdown</div>
+          <div class="mini-stat"><span class="ms-label">OEM Manuals</span><span class="ms-val" style="color:var(--amber)">234</span></div>
+          <div class="mini-stat"><span class="ms-label">Maintenance Work Orders</span><span class="ms-val" style="color:var(--amber)">487</span></div>
+          <div class="mini-stat"><span class="ms-label">P&IDs & Engineering Drawings</span><span class="ms-val" style="color:var(--amber)">156</span></div>
+          <div class="mini-stat"><span class="ms-label">Inspection Reports</span><span class="ms-val" style="color:var(--amber)">312</span></div>
+          <div class="mini-stat"><span class="ms-label">SOPs & Operating Procedures</span><span class="ms-val" style="color:var(--amber)">189</span></div>
+          <div class="mini-stat"><span class="ms-label">Regulatory Documents</span><span class="ms-val" style="color:var(--amber)">42</span></div>
+          <div class="mini-stat"><span class="ms-label" style="font-weight:700;color:var(--txt1)">Total Indexed</span><span class="ms-val" style="color:var(--emerald)">1,420</span></div>
+        </div>
+      </div>
+      <div class="card-title" style="margin-bottom:10px"><i class="fa-solid fa-list-check" style="color:var(--emerald)"></i>Active Ingestion Queue</div>
+      <div class="queue-list">
+        <div class="q-item"><i class="fa-solid fa-file-pdf qi-icon" style="color:#ef4444"></i><span class="qi-name">Inspection-Report-HX301-Jun2024.pdf</span><div class="qi-prog"><div class="qi-bar"><div class="qi-fill" style="width:100%;background:var(--emerald)"></div></div></div><span class="qi-status" style="color:var(--emerald)">✓ Complete</span></div>
+        <div class="q-item"><i class="fa-solid fa-file-image qi-icon" style="color:var(--sky)"></i><span class="qi-name">PID-CrudeUnit-Rev9-Scan.tiff</span><div class="qi-prog"><div class="qi-bar"><div class="qi-fill" style="width:73%;background:var(--amber)"></div></div></div><span class="qi-status" style="color:var(--amber)">73% — OCR</span></div>
+        <div class="q-item"><i class="fa-solid fa-file-excel qi-icon" style="color:#22c55e"></i><span class="qi-name">WorkOrders-Q2-2024-Bulk.xlsx</span><div class="qi-prog"><div class="qi-bar"><div class="qi-fill" style="width:38%;background:var(--sky)"></div></div></div><span class="qi-status" style="color:var(--sky)">38% — Parse</span></div>
+        <div class="q-item"><i class="fa-solid fa-file-lines qi-icon" style="color:var(--violet)"></i><span class="qi-name">OISD-118-Rev2024.pdf</span><div class="qi-prog"><div class="qi-bar"><div class="qi-fill" style="width:8%;background:var(--violet)"></div></div></div><span class="qi-status" style="color:var(--txt3)">Queued</span></div>
+        <div class="q-item"><i class="fa-solid fa-envelope qi-icon" style="color:var(--amber)"></i><span class="qi-name">OperationsEmail-Archive-2023.mbox</span><div class="qi-prog"><div class="qi-bar"><div class="qi-fill" style="width:0%;background:var(--amber)"></div></div></div><span class="qi-status" style="color:var(--txt3)">Pending</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!--══════════════ ARCHITECTURE ══════════════-->
+  <div class="view" id="view-arch">
+    <div class="archv">
+      <div class="sec-hdr">
+        <div class="sec-title"><i class="fa-solid fa-sitemap"></i>System Architecture — IND-INTELLIGENCE Platform</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-layer">
+          <div class="arch-layer-lbl">Data Sources Layer — Heterogeneous Industrial Document Corpus</div>
+            <div class="arch-row">
+            <div class="arch-node"><i class="fa-solid fa-file-pdf" style="color:#ef4444"></i><span class="arch-nn">P&IDs / DWG</span><span class="arch-ns">Engineering drawings</span></div>
+            <div class="arch-node"><i class="fa-solid fa-file-excel" style="color:#22c55e"></i><span class="arch-nn">Enterprise EAM</span><span class="arch-ns">SAP / IBM Maximo</span></div>
+            <div class="arch-node"><i class="fa-solid fa-file-lines" style="color:var(--sky)"></i><span class="arch-nn">OEM Manuals</span><span class="arch-ns">SOPs & procedures</span></div>
+            <div class="arch-node"><i class="fa-solid fa-clipboard-list" style="color:var(--violet)"></i><span class="arch-nn">Inspection Reports</span><span class="arch-ns">NDT & statutory</span></div>
+            <div class="arch-node"><i class="fa-solid fa-envelope" style="color:var(--amber)"></i><span class="arch-nn">Email Archives</span><span class="arch-ns">Operational comms</span></div>
+            <div class="arch-node"><i class="fa-solid fa-shield-halved" style="color:var(--rose)"></i><span class="arch-nn">Regulations</span><span class="arch-ns">PESO / OISD / BIS</span></div>
+            <div class="arch-node"><i class="fa-solid fa-database" style="color:var(--emerald)"></i><span class="arch-nn">SCADA / DCS</span><span class="arch-ns">Real-time sensor data</span></div>
+          </div>
+        </div>
+        <div class="arch-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+        <div class="arch-layer">
+          <div class="arch-layer-lbl">Ingestion & Intelligence Layer — AI Document Processing Pipeline</div>
+          <div class="arch-row">
+            <div class="arch-node"><i class="fa-solid fa-eye" style="color:var(--sky)"></i><span class="arch-nn">OCR / CV Engine</span><span class="arch-ns">P&ID digitisation</span></div>
+            <div class="arch-node"><i class="fa-solid fa-tags" style="color:var(--amber)"></i><span class="arch-nn">NER Pipeline</span><span class="arch-ns">Entity extraction</span></div>
+            <div class="arch-node"><i class="fa-solid fa-circle-nodes" style="color:var(--violet)"></i><span class="arch-nn">Knowledge Graph</span><span class="arch-ns">Neo4j · graph DB</span></div>
+            <div class="arch-node"><i class="fa-solid fa-vector-square" style="color:var(--emerald)"></i><span class="arch-nn">Vector Store</span><span class="arch-ns">Pinecone / pgvector</span></div>
+            <div class="arch-node"><i class="fa-solid fa-gear" style="color:var(--txt2)"></i><span class="arch-nn">Ontology Engine</span><span class="arch-ns">Industrial taxonomy</span></div>
+          </div>
+        </div>
+        <div class="arch-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+        <div class="arch-layer">
+          <div class="arch-layer-lbl">AI Reasoning Layer — Five Agentic Modules</div>
+          <div class="arch-row">
+            <div class="arch-node" style="border-color:rgba(245,158,11,.3)"><i class="fa-solid fa-message" style="color:var(--amber)"></i><span class="arch-nn">RAG Copilot</span><span class="arch-ns">GPT-4o / Gemini Pro</span></div>
+            <div class="arch-node" style="border-color:rgba(139,92,246,.3)"><i class="fa-solid fa-brain" style="color:var(--violet)"></i><span class="arch-nn">Predictive RCA</span><span class="arch-ns">ML failure models</span></div>
+            <div class="arch-node" style="border-color:rgba(16,185,129,.3)"><i class="fa-solid fa-shield-halved" style="color:var(--emerald)"></i><span class="arch-nn">Compliance Agent</span><span class="arch-ns">Rule engine + LLM</span></div>
+            <div class="arch-node" style="border-color:rgba(56,189,248,.3)"><i class="fa-solid fa-lightbulb" style="color:var(--sky)"></i><span class="arch-nn">Lessons Engine</span><span class="arch-ns">Pattern detection AI</span></div>
+            <div class="arch-node" style="border-color:rgba(249,115,22,.3)"><i class="fa-solid fa-magnifying-glass-chart" style="color:var(--orange)"></i><span class="arch-nn">Quality Agent</span><span class="arch-ns">QMS integration</span></div>
+          </div>
+        </div>
+        <div class="arch-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+        <div class="arch-layer" style="margin-bottom:0">
+          <div class="arch-layer-lbl">Delivery Layer — Any Device, Any Function, Any Location</div>
+          <div class="arch-row">
+            <div class="arch-node"><i class="fa-solid fa-desktop" style="color:var(--txt2)"></i><span class="arch-nn">Web Dashboard</span><span class="arch-ns">Engineers & managers</span></div>
+            <div class="arch-node"><i class="fa-solid fa-mobile-screen" style="color:var(--txt2)"></i><span class="arch-nn">Mobile PWA</span><span class="arch-ns">Field technicians</span></div>
+            <div class="arch-node"><i class="fa-solid fa-plug" style="color:var(--txt2)"></i><span class="arch-nn">REST API</span><span class="arch-ns">SAP / CMMS / DCS</span></div>
+            <div class="arch-node"><i class="fa-solid fa-bell" style="color:var(--txt2)"></i><span class="arch-nn">Push Alerts</span><span class="arch-ns">WhatsApp / Teams / SMS</span></div>
+            <div class="arch-node"><i class="fa-solid fa-tablet-screen-button" style="color:var(--txt2)"></i><span class="arch-nn">Tablet (Offline)</span><span class="arch-ns">Field-first PWA</span></div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  </div><!-- /vc -->
+</main>
+</div><!-- /shell -->
+
+<script>
+/*──────────────────────────────── VIEW SWITCHER */
+const VIEWS=['dash','copilot','graph','compliance','rca','lessons','ingestion','arch','pid'];
+const BC={
+  dash:'Command Dashboard',copilot:'Expert Copilot / RAG Conversation',
+  graph:'Knowledge Graph / Entity Map',compliance:'Compliance Shield / PESO · OISD · Factories Act',
+  rca:'Maintenance & RCA / Predictive Intelligence',
+  lessons:'Lessons Learned / Failure Pattern Engine',
+  ingestion:'Document Ingestion / Universal Pipeline',
+  arch:'Architecture / System Design',
+  pid:'P&ID Vision / Drawing Digitisation'
+};
+function sw(name){
+  VIEWS.forEach(v=>{
+    document.getElementById('view-'+v).classList.toggle('on',v===name);
+    document.getElementById('tab-'+v).classList.toggle('on',v===name);
+  });
+  document.getElementById('breadcrumb').innerHTML=
+    '<strong>'+BC[name].split('/')[0].trim()+'</strong>'+(BC[name].includes('/')?
+    ' <span style="color:var(--txt3)">/</span> '+BC[name].split('/').slice(1).join('/').trim():'');
+  if(name==='graph')setTimeout(renderGraph,50);
+}
+
+/*──────────────────────────────── MAINTENANCE TABS */
+function mtab(btn,id){
+  document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  ['tl-section','fleet-section','rca-tree'].forEach(s=>{
+    const el=document.getElementById(s);
+    if(el)el.style.display=s===id?'block':'none';
+  });
+}
+
+/*──────────────────────────────── COUNTER ANIMATION */
+function animateCounters(){
+  document.querySelectorAll('.cnum').forEach(el=>{
+    const target=+el.dataset.target,dur=1400;
+    let start=null;
+    function step(ts){
+      if(!start)start=ts;
+      const p=Math.min((ts-start)/dur,1);
+      el.textContent=Math.floor(p*target).toLocaleString();
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+setTimeout(animateCounters,300);
+
+/*──────────────────────────────── KNOWLEDGE GRAPH CANVAS */
+function renderGraph(){
+  const canvas=document.getElementById('gcanvas');
+  if(!canvas||canvas._running)return;
+  canvas._running=true;
+  const ctx=canvas.getContext('2d');
+  canvas.width=canvas.offsetWidth;
+  canvas.height=canvas.offsetHeight;
+  const W=canvas.width,H=canvas.height;
+
+  const nodes=[
+    {x:W*.50,y:H*.50,r:24,label:'CDU-UNIT-1',color:'#f59e0b'},
+    {x:W*.24,y:H*.38,r:20,label:'PUMP-102A',color:'#f43f5e'},
+    {x:W*.26,y:H*.68,r:17,label:'VALVE-V204',color:'#f59e0b'},
+    {x:W*.74,y:H*.36,r:17,label:'HX-301',color:'#10b981'},
+    {x:W*.14,y:H*.55,r:15,label:'OEM-Valve-Rev3',color:'#10b981'},
+    {x:W*.50,y:H*.18,r:15,label:'OISD-116',color:'#38bdf8'},
+    {x:W*.76,y:H*.65,r:15,label:'PESO-2000',color:'#38bdf8'},
+    {x:W*.38,y:H*.22,r:13,label:'WO-2023-0421',color:'#f59e0b'},
+    {x:W*.86,y:H*.44,r:13,label:'Insp-HX301',color:'#10b981'},
+    {x:W*.62,y:H*.78,r:12,label:'Incident-Oct23',color:'#f43f5e'},
+    {x:W*.16,y:H*.26,r:12,label:'Eng.Sharma',color:'#8b5cf6'},
+    {x:W*.88,y:H*.26,r:12,label:'SOP-CDU-22',color:'#10b981'},
+    {x:W*.58,y:H*.35,r:11,label:'COMP-201',color:'#f59e0b'},
+  ];
+  const edges=[[0,1],[0,2],[0,3],[0,5],[0,7],[0,12],
+    [1,4],[1,7],[1,9],[2,4],[2,5],[2,6],
+    [3,8],[3,6],[5,6],[5,11],[6,9],[7,10],[0,11],[8,6],[10,7]];
+
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle='rgba(26,39,64,.4)';ctx.lineWidth=.5;
+    for(let x=0;x<W;x+=44){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=44){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    t+=.007;
+    const an=nodes.map((n,i)=>({...n,x:n.x+Math.sin(t+i*1.3)*4,y:n.y+Math.cos(t+i*.9)*3}));
+    // edges
+    edges.forEach(([a,b])=>{
+      const na=an[a],nb=an[b];
+      const g=ctx.createLinearGradient(na.x,na.y,nb.x,nb.y);
+      g.addColorStop(0,na.color+'44');g.addColorStop(1,nb.color+'44');
+      ctx.beginPath();ctx.moveTo(na.x,na.y);ctx.lineTo(nb.x,nb.y);
+      ctx.strokeStyle=g;ctx.lineWidth=1.2;ctx.stroke();
+    });
+    // nodes
+    an.forEach(n=>{
+      const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*2.8);
+      g.addColorStop(0,n.color+'20');g.addColorStop(1,'transparent');
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r*2.8,0,Math.PI*2);
+      ctx.fillStyle=g;ctx.fill();
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+      ctx.fillStyle=n.color+'18';ctx.fill();
+      ctx.strokeStyle=n.color;ctx.lineWidth=1.8;ctx.stroke();
+      ctx.fillStyle='#e2e8f0';
+      ctx.font=`500 ${Math.max(8,n.r*.52)}px Inter,sans-serif`;
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(n.label,n.x,n.y+n.r+11);
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+/*──────────────────────────────── CHAT */
+const KB=[
+  {kw:['torque','v204','valve-v204','valve v204','valve'],
+   r:'According to the <strong>OEM Manual for high-pressure series valves (Rev 3, Page 42 §6.3)</strong>, the correct torque specification for <strong>VALVE-V204</strong> under operating pressures exceeding 150 bar is <strong>180 Nm ± 5%</strong>.<br><br>Apply using a calibrated Class-1 torque wrench. Lubricate fastener threads with Molykote GN-Plus prior to torquing. Re-check torque after 4 hours of operation at temperature.',
+   cit:[{i:'fa-file-pdf',c:'#ef4444',n:'OEM-Valve-Manual-Rev3.pdf',r:'Page 42, §6.3'},
+        {i:'fa-file-lines',c:'var(--amber)',n:'WO-2024-0219.pdf',r:'Maint. note'}],conf:97},
+  {kw:['pump','102a','pump-102a','bearing','vibration','failure','history'],
+   r:'<strong>PUMP-102A</strong> has a documented recurring failure pattern:<br><br>• <strong>Oct 2023</strong>: Bearing failure — water ingress via shaft gland seal → grease hardening → race failure. Replacement: SKF 6314-2RS. (WO-2023-0421)<br>• <strong>Current Jun 2024</strong>: Vibration 14.2 mm/s RMS (2.8× baseline). BPFO spectrum at 38 Hz. AI predicts failure in <strong>72–96 hours</strong>. <br><br>Root cause (systemic): OEM gland seal inadequate for coastal RH >85%. Same pattern found across 3 refineries in 14 incidents.',
+   cit:[{i:'fa-file-excel',c:'#22c55e',n:'Maint-Log-Oct2023.xlsx',r:'Row 142'},
+        {i:'fa-file-pdf',c:'#ef4444',n:'PUMP-102A-VibrationReport-Jun24.pdf',r:'Page 3'}],conf:94},
+  {kw:['oisd','116','oisd-116','shutdown','esd','emergency'],
+   r:'Under <strong>OISD-116 §4.3</strong> — Emergency Shutdown Requirements:<br><br>1. Full ESD drills must be conducted <strong>quarterly</strong><br>2. Drill must simulate actual trip conditions<br>3. Witnessed by Safety Officer and Unit Head<br>4. Documentation: date, participants, deficiencies, corrective actions<br><br>⚠️ <strong>COMPLIANCE ALERT: Q2 2024 drill not yet conducted.</strong> Regulatory deadline is June 30, 2024 — 8 days remaining.',
+   cit:[{i:'fa-file-lines',c:'var(--violet)',n:'OISD-116-ShutdownProc.pdf',r:'§4.3, Page 18'},
+        {i:'fa-file-pdf',c:'#ef4444',n:'ComplianceAudit-May2024.pdf',r:'Finding #7'}],conf:99},
+  {kw:['hx','301','hx-301','heat exchanger','inspection'],
+   r:'Latest inspection for <strong>HX-301</strong> (Crude Pre-heat Train) conducted 14 June 2024:<br><br>• <strong>Shell-side fouling</strong>: 8.2% (limit: 15%) ✓<br>• <strong>Tube bundle</strong>: 256/256 tubes in service, 0 plugged ✓<br>• <strong>Pressure test</strong>: Passed at 24 bar (design: 20 bar) ✓<br>• <strong>Next inspection</strong>: December 2024 per OISD-147 (6-month interval)<br><br>Status: <strong style="color:var(--emerald)">NOMINAL — no action required</strong>',
+   cit:[{i:'fa-file-pdf',c:'#ef4444',n:'Inspection-Report-HX301-Jun2024.pdf',r:'Full Report'}],conf:98},
+  {kw:['peso','hot work','permit','fire','hotwork'],
+   r:'Under <strong>PESO Rules 2000 — Clause 12.4</strong>, Hot Work Permit procedure:<br><br>1. Gas test by authorised person ≤1hr before work<br>2. Fire watcher stationed throughout<br>3. Permit valid for <strong>one shift only</strong> (max 12 hrs) — re-issue each shift<br>4. Countersigned by Area Authority & Safety Officer<br>5. Original displayed at work site<br><br>⚠️ <strong>COMPLIANCE ALERT: CDU-Unit-1 flange replacement HWP EXPIRED 3 days ago.</strong> Work must be suspended until reissued.',
+   cit:[{i:'fa-file-lines',c:'var(--violet)',n:'PESO-HotWork-Procedure.pdf',r:'Clause 12.4'},
+        {i:'fa-file-pdf',c:'#ef4444',n:'ComplianceAudit-May2024.pdf',r:'Gap #1'}],conf:96},
+  {kw:['cdu','unit-1','cdu-unit','cdu unit','technician','worked'],
+   r:'Last maintenance activity on <strong>CDU-Unit-1</strong>:<br><br>• <strong>WO-2024-0791</strong> (Feb 14, 2024) — Technician: <strong>R. Sharma (EMP-2341)</strong> — Routine flange inspection, 3 fasteners re-torqued<br>• <strong>WO-2024-0803</strong> (Mar 02, 2024) — Technician: <strong>P. Nair (EMP-1892)</strong> — Insulation replacement on outlet piping<br>• <strong>WO-2024-0831</strong> (Jun 22, 2024 — Active) — Flange replacement in progress (permit issue flagged)',
+   cit:[{i:'fa-file-excel',c:'#22c55e',n:'WorkOrders-CDU1-2024.xlsx',r:'WO log'},
+        {i:'fa-solid fa-person-digging',c:'var(--amber)',n:'Personnel-Records.db',r:'EMP-2341, EMP-1892'}],conf:93},
+];
+function fq(t){document.getElementById('uinput').value=t;document.getElementById('uinput').focus()}
+function findR(q){
+  const ql=q.toLowerCase();
+  for(const item of KB)if(item.kw.some(k=>ql.includes(k)))return item;
+  return{r:'Cross-referencing 1,420 indexed documents across all categories… No exact match found for this specific query in the current corpus.<br><br>This may indicate:<br>• The relevant document has not yet been ingested — use the <em>Doc Ingestion</em> module<br>• The query requires domain-specific terminology — try rephrasing with equipment tags or document numbers<br>• The information exists in an undigitised format (scanned document pending OCR processing)',cit:[],conf:38};
+}
+function handleQ(e){
+  e.preventDefault();
+  const inp=document.getElementById('uinput');
+  const box=document.getElementById('chat-box');
+  const txt=inp.value.trim();
+  if(!txt)return;
+  inp.value='';
+  const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  box.innerHTML+=`<div class="msg u fu"><div class="mbubble">${txt}</div><div class="mmeta">${now}</div></div>`;
+  const tid='t'+Date.now();
+  box.innerHTML+=`<div class="msg a" id="${tid}"><div class="mbubble"><div class="typing"><div class="td"></div><div class="td"></div><div class="td"></div></div></div></div>`;
+  box.scrollTop=box.scrollHeight;
+  const res=findR(txt);
+  setTimeout(()=>{
+    const tel=document.getElementById(tid);
+    if(tel)tel.remove();
+    const citH=res.cit&&res.cit.length?`<div class="cit"><div class="cit-lbl">Sources Verified (${res.cit.length})</div>${res.cit.map(c=>`<div class="cit-item"><i class="fa-solid ${c.i}" style="color:${c.c}"></i><span>${c.n}</span><span class="cit-ref">${c.r}</span></div>`).join('')}<div class="conf-row"><span class="conf-lbl">Confidence</span><div class="conf-track"><div class="conf-fill" style="width:${res.conf}%;background:${res.conf>80?'var(--emerald)':res.conf>60?'var(--amber)':'var(--rose)'}"></div></div><span class="conf-val" style="color:${res.conf>80?'var(--emerald)':res.conf>60?'var(--amber)':'var(--rose)'}">${res.conf}%</span></div></div>`:'';
+    box.innerHTML+=`<div class="msg a fu"><div class="mbubble"><p style="line-height:1.7">${res.r}</p>${citH}</div><div class="mmeta">IND-AI · ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} · RAG Engine</div></div>`;
+    box.scrollTop=box.scrollHeight;
+  },600+Math.random()*500);
+}
+</script>
+</body>
+</html>
