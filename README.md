@@ -140,3 +140,21 @@ To build the static application and run it locally on port `5173`:
    npx -y serve@latest out -l 5173
    ```
 3. Open `http://localhost:5173` to experience the fully optimized build.
+
+## 🧑‍💻 *Developed By*
+
+###  *Team AV CodeHack*
+> Empowering smart education through innovation and collaboration.
+
+| Name | Role | LinkedIn |
+|------|------|-----------|
+| *Venu Munendra Kumar Pasumurthy* | Team Lead | [LinkedIn](https://www.linkedin.com/in/venupasumurthy) |
+| *Aishwarya Natesan* | Developer | [LinkedIn](https://www.linkedin.com/in/aishwarya-natesan-bb48a1360) |
+| *Sai Charan Pasupuleti* | Backend | [LinkedIn](https://www.linkedin.com/in/saicharanpasupuleti/) |
+---
+📧 *Contact:*
+- venupasumurthy0509@gmail.com
+- natesanaishwarya@gmail.com
+- psai73873@gmail.com
+---
+⭐ *If you like this project, consider giving it a star on GitHub!*
